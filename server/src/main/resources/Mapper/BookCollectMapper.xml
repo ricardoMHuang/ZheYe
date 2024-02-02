@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zheye.server.mapper.BookCollectMapper">
+    <delete id="deleteBookCollection" parameterType="object">
+        delete
+        from bookcollect
+        where id = #{id}
+          and user_id = #{userId}
+    </delete>
+    <insert id="addBookCollection" parameterType="object">
+        insert into bookcollect
+        values (#{})
+    </insert>
+</mapper>
