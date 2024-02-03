@@ -13,5 +13,8 @@ export default {
     async addBookCollection(params) {
         return await http.post("frontApi/bookCollect/addBookCollection", params);
     },
-
+    /*查询书籍是否在用户书架*/
+    async selectBookCollect(params) {
+        return await http.post("frontApi/bookCollect/selectBookCollect", params);
+    },
 }

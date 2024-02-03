@@ -18,10 +18,10 @@ public class BookCollect implements Serializable {
     @TableId(value = "Id", type = IdType.AUTO)
 
     private int id;
-
+    private int bookId;
     private static final long serialVersionUID = 1L;
 
-    private Long userId;
+    private int userId;
 
     private String imageUrl;
 
@@ -34,4 +34,6 @@ public class BookCollect implements Serializable {
     private String bookName;
 
     private String country;
+    //是否在书架中
+    private boolean state;
 }

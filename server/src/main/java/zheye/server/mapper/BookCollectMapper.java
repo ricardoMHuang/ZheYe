@@ -3,6 +3,7 @@ package zheye.server.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 import zheye.server.entity.BookCollect;
+import zheye.server.utils.Result;
 
 import java.util.Map;
 
@@ -21,4 +22,5 @@ public interface BookCollectMapper extends BaseMapper<BookCollect> {
 
      boolean addBookCollection(BookCollect bookCollect);
 
+     BookCollect selectBookCollect(BookCollect bookCollect);
 }

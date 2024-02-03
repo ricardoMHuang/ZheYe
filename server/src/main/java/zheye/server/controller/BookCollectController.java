@@ -23,6 +23,19 @@ public class BookCollectController {
     @Resource
     private BookCollectService bookCollectService;
 
+    @PostMapping("/selectBookCollect")
+    public Result selectBookCollect(@RequestBody BookCollect bookCollect) {
+        System.out.println(bookCollect);
+//        BookCollect bookCollectRes = bookCollectService.getById(bookCollect.getId());
+
+        BookCollect bookCollectRes = bookCollectService.selectBookCollect(bookCollect);
+        if (bookCollectRes != null) {
+            return Result.ok(bookCollectRes).message("获取" + bookCollectRes.getBookName() + "成功");
+        } else {
+            return Result.error().message("不在书架中 ");
+        }
+    }
+
     @PostMapping("/bookCoItem")
     public Result bookCoItem(@RequestBody BookCollect bookCollect) {
         List<BookCollect> bookCollects = bookCollectService.bookCoItem(bookCollect);
@@ -39,24 +52,29 @@ public class BookCollectController {
     public Result deleteBookCollection(@RequestBody BookCollect bookCollect) {
         System.out.println(bookCollect);
         if (bookCollectService.deleteBookCollection(bookCollect)) {
-            System.out.println(Result.ok().message("成功删除"));
+            System.out.println("成功删除");
             return Result.ok().message("成功删除");
         } else {
-            System.out.println(Result.error().message("删除失败"));
+            System.out.println("删除失败");
             return Result.error().message("删除失败");
         }
     }
-
     @PostMapping("/addBookCollection")
     public Result addBookCollection(@RequestBody BookCollect bookCollect) {
+
         System.out.println(bookCollect);
-        if (bookCollectService.deleteBookCollection(bookCollect)) {
-            System.out.println(Result.ok().message("成功删除"));
-            return Result.ok().message("成功删除");
+        if (bookCollectService.selectBookCollect(bookCollect) == null) {
+            if (bookCollectService.addBookCollection(bookCollect)) {
+                System.out.println(Result.ok().message("成功加入书架"));
+                return Result.ok().message("成功加入书架");
+            } else {
+                System.out.println(Result.error().message("加入失败"));
+                return Result.error().message("加入失败");
+            }
         } else {
-            System.out.println(Result.error().message("删除失败"));
-            return Result.error().message("删除失败");
+            return Result.error().message("已经在书架中了");
         }
+
     }
 }
 

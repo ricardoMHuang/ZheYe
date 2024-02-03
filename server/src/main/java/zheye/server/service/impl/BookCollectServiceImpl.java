@@ -7,6 +7,7 @@ import zheye.server.entity.BookCollect;
 import zheye.server.mapper.BookCollectMapper;
 import zheye.server.service.BookCollectService;
 import org.springframework.stereotype.Service;
+import zheye.server.utils.Result;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
     public List<BookCollect> bookCoItem(BookCollect bookCollect) {
         QueryWrapper<BookCollect> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!ObjectUtils.isEmpty(bookCollect.getUserId()), "user_id", bookCollect.getUserId());
-        System.out.print(baseMapper.selectList(queryWrapper));
+//        System.out.print(baseMapper.selectList(queryWrapper));
         return baseMapper.selectList(queryWrapper);
     }
 
@@ -41,6 +42,12 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
     @Override
     public boolean deleteBookCollection(BookCollect bookCollect) {
         return baseMapper.deleteBookCollection(bookCollect);
+    }
+
+    @Override
+    public BookCollect selectBookCollect(BookCollect bookCollect) {
+
+        return baseMapper.selectBookCollect(bookCollect);
     }
 
 }

@@ -4,11 +4,32 @@
     <delete id="deleteBookCollection" parameterType="object">
         delete
         from bookcollect
-        where id = #{id}
-          and user_id = #{userId}
+        where
+        <if test="bookId!=null and bookId!=''">
+            book_id = #{bookId}
+
+        </if>
+        <if test="userId!=null and userId!=''">
+            and user_id = #{userId}
+        </if>
     </delete>
+
+    <select id="selectBookCollect" parameterType="object" resultType="zheye.server.entity.BookCollect">
+        select * from bookcollect
+        where
+        <if test="bookId!=null and bookId!=''">
+            book_id = #{bookId}
+        </if>
+        <if test="userId!=null and userId!=''">
+            and user_id = #{userId}
+        </if>
+    </select>
+
+
     <insert id="addBookCollection" parameterType="object">
-        insert into bookcollect
-        values (#{})
+        insert into bookcollect (id, book_id, user_id, image_url, author, create_time, detail, book_name, country,
+                                 state)
+        values (#{id}, #{bookId}, #{userId}, #{imageUrl}, #{author}, NOW(), #{detail}, #{bookName}, #{country},
+                #{state})
     </insert>
 </mapper>

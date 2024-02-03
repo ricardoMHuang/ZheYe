@@ -84,8 +84,8 @@ export default {
       }).then(() => {
         let userId = JSON.parse(window.sessionStorage.getItem('userInfo')).id;
         console.log(this.allData[index].id + " " + userId);
-        let res = bookCollectApi.deleteBookCollection({id: this.allData[index].id, userId: userId});
-        console.log(res.data)
+        let res = bookCollectApi.deleteBookCollection({bookId: this.allData[index].bookId, userId: userId});
+        console.log(res);
         this.load();
         this.$message({
           type: 'success',

@@ -31,7 +31,8 @@
         <h5>{{ book.publish }}</h5>
         <h5>{{ book.page }}页</h5>
         <div style="height: 50px">
-          <el-button type="primary" @click="addBook()">加入书架</el-button>
+          <el-button type="primary" @click="addBookCollect()" v-show="!state">加入书架</el-button>
+          <el-button type="success" @click="deleteBookCollect()" v-show="state">已加入</el-button>
         </div>
         <el-tag size="mini">爱情</el-tag>&nbsp;
         <el-tag size="mini">科幻</el-tag>
@@ -153,7 +154,7 @@ import directoryApi from "@/../api/directory";
 import articleApi from "../../../api/article";
 import bookDetailApi from "../../../api/bookDetail";
 import userApi from "../../../api/user";
-import bookApi from "../../../api/user";
+import bookCollectApi from "../../../api/bookCollect";
 
 export default {
   name: "newBook",
@@ -167,6 +168,7 @@ export default {
     };
 
     return {
+      state: false,
       dialogVisible: false,
       dialogTwoVisible: false,
       title: '',
@@ -199,6 +201,18 @@ export default {
       this.book = JSON.parse(this.$route.query.book);
       console.log(this.author);
       console.log(this.book);
+      //根据bookId和userId查询收藏表，返回state判断该用户是否收藏
+      let isCollect = await bookCollectApi.selectBookCollect({
+        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        bookId: this.book.id
+      })
+      console.log(isCollect);
+      isCollect = isCollect.data;
+      console.log(isCollect);
+      if (isCollect.data.state) {
+        this.state = isCollect.data.state;
+      }
+
       //请求目录
       let res = await directoryApi.getDirectory(this.$route.query.id);
       if (res.data.data) {
@@ -243,6 +257,8 @@ export default {
       this.ruleForm.comment = "";
       this.ruleForm.rate = "";
     },
+
+    // 提交评论和评分
     async submit(formName) {
       var dt = new Date();
       let year = dt.getFullYear();
@@ -251,7 +267,6 @@ export default {
       let time = year + "-" + month + "-" + day;
       console.log(time);
 
-      // 提交评论和评分
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$confirm('确认提交吗?', '提示', {
@@ -284,6 +299,7 @@ export default {
         }
       });
     },
+
     open(buttonNumber) {
       //打开提交框
       this.dialogVisible = true;
@@ -308,12 +324,45 @@ export default {
       })
     },
     //加入书架
-    async addBook() {
-      let res = bookApi.addBookCollection({
+    async addBookCollect() {
+      console.log(this.book);
+      let res = await bookCollectApi.addBookCollection({
         userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
-        book: this.book
+        bookName: this.book.name,
+        bookId: this.book.id,
+        imageUrl: this.book.image,
+        author: this.author.name,
+        detail: this.book.briefIntroduction,
+        country: this.author.country,
+        state: 1
       });
       console.log(res);
+      console.log(res.data);
+      if (res.data.success) {
+        this.state = true;
+        location.reload();
+      }
+      alert(res.data.message);
+    },
+    //移出书架
+    async deleteBookCollect() {
+      let res = await bookCollectApi.deleteBookCollection({
+        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        bookName: this.book.name,
+        bookId: this.book.id,
+        imageUrl: this.book.image,
+        author: this.author.name,
+        detail: this.book.briefIntroduction,
+        country: this.author.country,
+        state: 1
+      });
+      console.log(res);
+      console.log(res.data);
+      if (res.data.success) {
+        this.state = true;
+        location.reload();
+      }
+      alert(res.data.message);
     },
     //返回上一级
     goBack() {

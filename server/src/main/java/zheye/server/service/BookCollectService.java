@@ -8,6 +8,7 @@ import zheye.server.entity.BookCollect;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import zheye.server.entity.User;
+import zheye.server.utils.Result;
 
 import java.util.List;
 
@@ -29,4 +30,5 @@ public interface BookCollectService extends IService<BookCollect> {
 
     boolean deleteBookCollection(BookCollect bookCollect);
 
+    BookCollect selectBookCollect(BookCollect bookCollect);
 }
