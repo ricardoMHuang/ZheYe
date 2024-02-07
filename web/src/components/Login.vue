@@ -86,7 +86,6 @@ export default {
         this.$message.error('用户不存在或密码错误');
         return false;
       }
-      return;
     },
     /*注册验证*/
     async register() {
@@ -105,7 +104,7 @@ export default {
     async sendEmailCode() {
       if (!this.registerForm.email)
         this.$message.warning('请输入邮箱');
-      else if (this.registerForm.email.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) === -1)
+      else if (this.registerForm.email.search(/^\w+((-\w+)|(\.\w+))*[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) === -1)
         this.$message.error('邮箱格式错误');
       else {
         let res = await userApi.registerEmail(this.registerForm.email);
@@ -289,7 +288,7 @@ export default {
 }
 
 .main-box .login {
-  left: calc(100% - 400px);
+  left: calc(100% - 500px);
 }
 
 .main-box .login .switch__circle {
