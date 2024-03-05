@@ -6,4 +6,5 @@ import zheye.server.entity.BookComment;
 
 
 public interface BookCommentMapper extends BaseMapper<BookComment> {
+
 }

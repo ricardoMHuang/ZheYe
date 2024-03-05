@@ -31,6 +31,7 @@
         <h5>{{ book.publish }}</h5>
         <h5>{{ book.page }}页</h5>
         <div style="height: 50px">
+          <el-button type="success" @click="openBook()">阅读</el-button>
           <el-button type="primary" @click="addBookCollect()" v-show="!state">加入书架</el-button>
           <el-button type="success" @click="deleteBookCollect()" v-show="state">已加入</el-button>
         </div>
@@ -122,12 +123,11 @@
     </div>
     <!--      评论-->
     <h3>评论</h3>
-    <div v-for="(comment,index) in commentList" v-if="index<5" style="position:relative;">
+    <div v-for="(comment,index) in commentList" v-if="index<showCommentsNumber" style="position:relative;">
       <div style="margin-top: 40px">
         <el-avatar size="large" :src="users[index].avatar"></el-avatar>
         <div style="display: inline-block;padding: 10px">
-          <div>{{ users[index].nickname }}
-          </div>
+          <div>{{ users[index].nickname }}</div>
           <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
         </div>
       </div>
@@ -141,8 +141,9 @@
       </div>
       <el-divider></el-divider>
     </div>
+
     <div style="text-align: center;margin: 30px">
-      <el-button type="primary">展开更多</el-button>
+      <el-button type="primary" @click="more()">展开更多</el-button>
     </div>
 
   </div>
@@ -155,6 +156,8 @@ import articleApi from "../../../api/article";
 import bookDetailApi from "../../../api/bookDetail";
 import userApi from "../../../api/user";
 import bookCollectApi from "../../../api/bookCollect";
+// collapse 展开折叠
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 
 export default {
   name: "newBook",
@@ -171,6 +174,8 @@ export default {
       state: false,
       dialogVisible: false,
       dialogTwoVisible: false,
+
+      showCommentsNumber: 2,
       title: '',
       ruleForm: {
         comment: '',
@@ -209,8 +214,10 @@ export default {
       console.log(isCollect);
       isCollect = isCollect.data;
       console.log(isCollect);
-      if (isCollect.data.state) {
+      if (isCollect.data != null && isCollect.data.state) {
         this.state = isCollect.data.state;
+      } else {
+        this.state = false;
       }
 
       //请求目录
@@ -222,20 +229,20 @@ export default {
       }
       console.log(this.directory);
       console.log(res.data.data);
+
       // 请求读者推文
-      res = await articleApi.getArticleInt(this.book.articleId);
-      if (res.data.data) {
-        this.article = res.data.data;
+      let article = await articleApi.getArticleInt(this.book.articleId);
+      if (article.data.data) {
+        this.article = article.data.data;
       } else {
         this.article = "";
         console.log(this.article);
       }
 
       //根据书的id请求评论表
-      res = await bookDetailApi.getComment(this.book.id);
-      this.commentList = res.data.data;
+      let commentList = await bookDetailApi.getComment(this.book.id);
+      this.commentList = commentList.data.data;
       console.log(this.commentList);
-
       if (this.commentList) {
         for (let i = 0; i < this.commentList.length; i++) {
           let userResult = await userApi.getReplyer(this.commentList[i].userId);
@@ -323,6 +330,16 @@ export default {
         }
       })
     },
+    //打开书籍阅读
+    openBook() {
+      this.$router.push({
+        path: '/book/bookDetail/bookConnect',
+        query: {
+          book: JSON.stringify(this.book),
+          author: JSON.stringify(this.author)
+        }
+      })
+    },
     //加入书架
     async addBookCollect() {
       console.log(this.book);
@@ -364,10 +381,19 @@ export default {
       }
       alert(res.data.message);
     },
+    //展开更多评论
+    async more() {
+      if (this.showCommentsNumber < this.commentList.length) {
+        this.showCommentsNumber += 4;
+      } else {
+        this.showCommentsNumber = 2;
+
+      }
+    },
     //返回上一级
     goBack() {
       this.$router.back();
-    }
+    },
   }
 }
 </script>

@@ -13,6 +13,6 @@ public interface BookCommentService extends IService<BookComment> {
 
     void commentSet(BookComment comment);
 
-    Object getCommentSet(int id);
+    Object getComment(int id);
 }
 

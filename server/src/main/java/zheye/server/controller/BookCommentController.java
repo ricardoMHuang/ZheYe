@@ -28,8 +28,8 @@ public class BookCommentController {
     }
 
     @PostMapping("/getComment")
-    public Result getCommentItem(@RequestBody int id) {
-        return Result.ok(bookCommentService.getCommentSet(id)).message("获取评论成功");
+    public Result getComment(@RequestBody int id) {
+        return Result.ok(bookCommentService.getComment(id)).message("获取评论成功");
     }
 
 }

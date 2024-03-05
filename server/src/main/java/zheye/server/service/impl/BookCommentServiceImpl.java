@@ -25,7 +25,7 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
     }
 
     @Override
-    public List<BookComment> getCommentSet(int id) {
+    public Object getComment(int id) {
         QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("book_id", id);
         return baseMapper.selectList(queryWrapper);
