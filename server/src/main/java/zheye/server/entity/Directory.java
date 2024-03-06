@@ -16,21 +16,33 @@ import java.io.Serializable;
 @TableName("directory")
 public class Directory extends Model<Directory> {
     //第一章
-    private String chapterOne;
+    private Integer id;
 
     private int bookId;
+
+    private String chapterOne;
 
     private String chapterTwo;
 
     private String chapterThree;
-
-    private Integer id;
 
     private String chapterFour;
 
     private String chapterFive;
 
     private String chapterSix;
+
+    private String chapterOneContent;
+
+    private String chapterTwoContent;
+
+    private String chapterThreeContent;
+
+    private String chapterFourContent;
+
+    private String chapterFiveContent;
+
+    private String chapterSixContent;
 
 
 }

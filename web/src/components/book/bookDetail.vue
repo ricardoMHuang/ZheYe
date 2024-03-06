@@ -333,7 +333,7 @@ export default {
     //打开书籍阅读
     openBook() {
       this.$router.push({
-        path: '/book/bookDetail/bookConnect',
+        path: '/bookConnect',
         query: {
           book: JSON.stringify(this.book),
           author: JSON.stringify(this.author)

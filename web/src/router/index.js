@@ -16,7 +16,7 @@ import GroupDetail from "@/components/group/GroupDetail";
 import GroupFind from "@/components/group/GroupAll";
 import GroupAll from "@/components/group/GroupAll";
 import GroupPost from "@/components/group/MyGroup";
-import bookConnect from "@/components/book/bookConnect";
+import BookConnect from "@/components/book/bookContent/bookContent";
 
 Vue.use(VueRouter)
 
@@ -33,7 +33,6 @@ const routes = [
         children: [
             {path: '/book', component: Book,},
             {path: "/book/bookDetail", component: bookDetail},
-            {path: "/book/bookDetail/bookConnect", component: bookConnect},
             {path: "/book/category", component: category,},
             {path: "/book/ex", component: ex,},
             {path: '/book/article', component: article},
@@ -44,6 +43,12 @@ const routes = [
             {path: '/group/GroupPost', component: GroupPost},
 
         ],
+    },
+    {
+        path: "/bookConnect",
+        name: '书籍内容分页面',
+        component: BookConnect,
+        children: []
     },
     {
         path: '/personCenter', component: PersonalCenter,

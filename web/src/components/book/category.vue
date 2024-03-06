@@ -20,7 +20,11 @@
             <el-divider></el-divider>
           </div>
         </div>
-
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="1000">
+        </el-pagination>
       </el-tab-pane>
     </el-tabs>
 

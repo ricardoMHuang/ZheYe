@@ -25,7 +25,14 @@ public class DirectoryController {
 
     @PostMapping("/directories")
     public Result getDirectory(@RequestBody int id) {
+
         return Result.ok(directoryService.getDirectoryItem(id));
+    }
+
+    @PostMapping("/bookContent")
+    public Result getBookContent(@RequestBody int bookId) {
+        return Result.ok(directoryService.getDirectoryItem(bookId));
+
     }
 }
 
