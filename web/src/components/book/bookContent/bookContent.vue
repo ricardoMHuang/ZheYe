@@ -3,7 +3,7 @@
     <el-page-header @back="goBack" :content="this.book.name" style="padding: 20px ">
     </el-page-header>
     <el-divider></el-divider>
-    <el-empty description="空空如也！" v-if="emptyBookContent"></el-empty>
+    <el-empty description="该书还未上架！" v-if="emptyBookContent"></el-empty>
 
     <div v-else>
       <!--    目录-->
