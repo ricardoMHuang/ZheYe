@@ -20,16 +20,16 @@
         </div>
 
         <div
-            style="width: 450px;height: 30px;float: left;left:100px;top:15px;position: relative;box-shadow: #333333;padding:0px;background-color: #ffffff;border-radius: 8px; ">
+            style="width: 300px;height: 40px;float: left;left:100px;top:15px;position: relative;box-shadow: #333333;padding:0px;background-color: #ffffff;border-radius: 8px; ">
           <el-autocomplete
               row="20"
-              class="inline-input"
+              style="width: 250px"
               v-model="state1"
               :fetch-suggestions="querySearch"
               placeholder="请输入作者"
               @select="handleSelect"
           ></el-autocomplete>
-          <i class="el-icon-search" style="color: rgba(118,148,255,1);" @click="searchBook"></i>
+          <i class="el-icon-search" style="color: rgba(118,148,255,1); margin-left: 15px" @click="searchBook"></i>
         </div>
       </el-header>
 
@@ -294,12 +294,6 @@ export default {
 
 </style>
 <style>
-.el-input__inner {
-  height: 30px;
-  border: none;
-  width: 400px;
-  border-radius: 0px;
-}
 
 .toTop {
   width: 64px;

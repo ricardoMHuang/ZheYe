@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zheye.server.mapper.DirectoryMapper">
+    <select id="selectChapter" parameterType="integer" resultType="Map">
+        SELECT chapter1, chapter2, chapter3, chapter4, chapter5, chapter6
+        FROM directory
+        where book_id = #{bookId}
+    </select>
+</mapper>

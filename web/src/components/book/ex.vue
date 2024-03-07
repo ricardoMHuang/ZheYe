@@ -1,10 +1,15 @@
 <template>
-  <div>
-    <el-carousel :interval="5000" arrow="always" type="card" style="width: 1050px">
-      <el-carousel-item v-for="item in imgInfo" :key="item.id">
-        <img style="object-fit: scale-down; width: 100%;height: 100%;" :src="item.idviews"/>
-      </el-carousel-item>
-    </el-carousel>
+  <div id="app">
+    <div v-for="article in paginatedArticles" :key="article.id">
+      <p>{{ article.content }}</p>
+    </div>
+
+    <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="articles.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -13,16 +18,26 @@ export default {
   name: "ex",
   data() {
     return {
-      type: this.$route.query.type,
-      list: [],
-      imgInfo: [{id: 1, idviews: require("@/assets/photo-1.webp")}, {
-        id: 2,
-        idviews: require("@/assets/photo-1.webp")
-      }, {id: 3, idviews: require("@/assets/photo-1.webp")}],
-
+      articles: [
+        {id: 1, title: 'Article 1', content: 'Content of article 1'},
+        {id: 2, title: 'Article 2', content: 'Content of article 2'},
+        {id: 3, title: 'Article 3', content: 'Content of article 3'},
+        // Add more articles as needed
+      ],
+      pageSize: 2, // Number of articles per page
+      currentPage: 1 // Current page number
     }
   },
-  methods() {
+  computed: {
+    paginatedArticles() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      return this.articles.slice(startIndex, startIndex + this.pageSize);
+    }
+  },
+  methods: {
+    handleCurrentChange(page) {
+      this.currentPage = page;
+    }
   },
   created() {
 
@@ -33,11 +48,5 @@ export default {
 
 <style scoped>
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
 
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
-}
 </style>

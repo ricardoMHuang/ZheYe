@@ -45,7 +45,7 @@ const routes = [
         ],
     },
     {
-        path: "/bookConnect",
+        path: "/bookContent",
         name: '书籍内容分页面',
         component: BookConnect,
         children: []

@@ -8,7 +8,7 @@ import zheye.server.mapper.DirectoryMapper;
 import zheye.server.service.DirectoryService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * 目录(Directory)表服务实现类
@@ -27,6 +27,23 @@ public class DirectoryServiceImpl extends ServiceImpl<DirectoryMapper, Directory
 
             System.out.print(baseMapper.selectOne(queryWrapper));
             return baseMapper.selectOne(queryWrapper);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Map<String, String> getBookChapter(int bookId) {
+
+
+        if (ObjectUtils.isNotEmpty(baseMapper.selectChapter(bookId))) {
+            //遍历排序好的list，一定要放进LinkedHashMap，因为只有LinkedHashMap是根据插入顺序进行存储
+            LinkedHashMap<String, String> map = new LinkedHashMap<>();
+            System.out.println(baseMapper.selectChapter(bookId));
+            baseMapper.selectChapter(bookId).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(x -> map.put(x.getKey(), x.getValue()));
+            ;
+            System.out.println(map);
+            return map;
         } else {
             return null;
         }

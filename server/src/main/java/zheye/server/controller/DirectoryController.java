@@ -34,5 +34,11 @@ public class DirectoryController {
         return Result.ok(directoryService.getDirectoryItem(bookId));
 
     }
+
+    @PostMapping("/getBookChapter")
+    public Result getBookChapter(@RequestBody int bookId) {
+        return Result.ok(directoryService.getBookChapter(bookId));
+
+    }
 }
 

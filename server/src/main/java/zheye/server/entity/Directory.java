@@ -20,29 +20,29 @@ public class Directory extends Model<Directory> {
 
     private int bookId;
 
-    private String chapterOne;
+    private String chapter1;
 
-    private String chapterTwo;
+    private String chapter2;
 
-    private String chapterThree;
+    private String chapter3;
 
-    private String chapterFour;
+    private String chapter4;
 
-    private String chapterFive;
+    private String chapter5;
 
-    private String chapterSix;
+    private String chapter6;
 
-    private String chapterOneContent;
+    private String chapter1Content;
 
-    private String chapterTwoContent;
+    private String chapter2Content;
 
-    private String chapterThreeContent;
+    private String chapter3Content;
 
-    private String chapterFourContent;
+    private String chapter4Content;
 
-    private String chapterFiveContent;
+    private String chapter5Content;
 
-    private String chapterSixContent;
+    private String chapter6Content;
 
 
 }
