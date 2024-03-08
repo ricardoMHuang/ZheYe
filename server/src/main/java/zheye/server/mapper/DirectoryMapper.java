@@ -11,6 +11,5 @@ import java.util.Map;
 public interface DirectoryMapper extends BaseMapper<Directory> {
 
 
-    @MapKey("id")
     Map<String, String> selectChapter(int bookId);
 }
