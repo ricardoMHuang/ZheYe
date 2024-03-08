@@ -116,27 +116,46 @@
     </div>
     <!--      评论-->
     <h3>评论</h3>
-    <div v-for="(comment,index) in commentList" v-if="index<showCommentsNumber" style="position:relative;">
+    <div v-for="(comment,index) in commentList " style="position:relative;">
       <div style="margin-top: 40px">
-        <el-avatar size="large" :src="users[index].avatar"></el-avatar>
+        <el-avatar size="large" :src="comment.avatar"></el-avatar>
         <div style="display: inline-block;padding: 10px">
-          <div>{{ users[index].nickname }}</div>
+          <div>{{ comment.nickname }}</div>
           <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
         </div>
       </div>
-      <p style="margin: 10px 50px;height: 80px">
-        {{ comment.content }}
-      </p>
+      <div style="display: flex;flex-wrap: wrap">
+        <p style="margin: 0 50px;width: 65%; ">
+          {{ comment.content }}
+        </p>
+        <el-link :underline="false" @click="support(comment)" class="el_link">{{ comment.supportNum }} <i
+            class="el-icon-thumb" :style="{color:supportColor }"></i></el-link>
+        <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
+        <div style="background-color: #f9f8f4;border-radius:5px;width:100%;padding: 0 0 0 100px ; "
+             v-show="showChildComment" v-for="(childComment,index) in comment.childComment">
+          <div style="margin-top: 40px">
+            <el-avatar size="large" :src="comment.avatar"></el-avatar>
+            <div style="display: inline-block;padding: 10px">
+              <div>{{ comment.nickname }}</div>
+              <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
+            </div>
+          </div>
+          <div style="display: flex">
+            <p style="margin: 0 50px;width: 65%; ">
+              {{ childComment.content }}
+            </p>
+            <el-link :underline="false" class="el_link">{{ childComment.supportNum }} <i
+                class="el-icon-thumb" :style="{color:supportColor }"></i></el-link>
+            <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
+          </div>
+          <el-divider></el-divider>
 
-      <div style="position: relative; left: 83%; margin:10px; display: inline-block">
-        <el-button>赞</el-button>
-        <el-button>回复</el-button>
+        </div>
+        <el-link class="el_link" v-if="comment.childComment.length" @click="showChildComment = !showChildComment;"
+                 :underline="false">更多 <i class="el-icon-arrow-down"></i></el-link>
       </div>
-      <el-divider></el-divider>
-    </div>
 
-    <div style="text-align: center;margin: 30px">
-      <el-button type="primary" @click="more()">展开更多</el-button>
+      <el-divider></el-divider>
     </div>
 
   </div>
@@ -164,11 +183,10 @@ export default {
     };
 
     return {
+
       state: false,
       dialogVisible: false,
       dialogTwoVisible: false,
-
-      showCommentsNumber: 2,
       title: '',
       ruleForm: {
         comment: '',
@@ -188,11 +206,18 @@ export default {
       article: {},
       commentList: [],
       users: [],
+      showChildComment: false,
     }
   },
   mounted() {
     this.init();
   },
+  computed: {
+    supportColor() {
+      return "red"
+    }
+  },
+
   methods: {
     async init() {
       this.author = JSON.parse(this.$route.query.author);
@@ -204,9 +229,7 @@ export default {
         userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
         bookId: this.book.id
       })
-      console.log(isCollect);
       isCollect = isCollect.data;
-      console.log(isCollect);
       if (isCollect.data != null && isCollect.data.state) {
         this.state = isCollect.data.state;
       } else {
@@ -220,8 +243,6 @@ export default {
       } else {
         this.directory = "";
       }
-      console.log(this.directory);
-      console.log(res.data.data);
 
       // 请求读者推文
       let article = await articleApi.getArticleInt(this.book.articleId);
@@ -229,27 +250,26 @@ export default {
         this.article = article.data.data;
       } else {
         this.article = "";
-        console.log(this.article);
       }
 
       //根据书的id请求评论表
       let commentList = await bookDetailApi.getComment(this.book.id);
       this.commentList = commentList.data.data;
-      console.log(this.commentList);
+      console.log(this.commentList)
       if (this.commentList) {
+        console.log(this.commentList);
         for (let i = 0; i < this.commentList.length; i++) {
+          this.commentList[i].flag = false;
           let userResult = await userApi.getReplyer(this.commentList[i].userId);
           if (userResult.data.data) {
             this.users.push(userResult.data.data);
-            console.log(this.users);
           } else {
             this.users = "";
-            console.log(this.users);
           }
         }
       } else {
         this.commentList = "";
-        console.log(this.commentList);
+        console.log(this.commentList + "暂无评论");
       }
     },
     clear() {
@@ -382,6 +402,13 @@ export default {
 
       }
     },
+    //显示评论框
+    showInput(comment) {
+
+    },
+    support(comment) {
+      this.commentList
+    },
     //返回上一级
     goBack() {
       this.$router.back();
@@ -413,5 +440,10 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.el_link {
+  height: 40px;
+  width: 8%;
 }
 </style>

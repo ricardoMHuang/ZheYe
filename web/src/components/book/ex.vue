@@ -1,49 +1,29 @@
 <template>
   <div id="app">
-    <div v-for="article in paginatedArticles" :key="article.id">
-      <p>{{ article.content }}</p>
+    <div v-for="item in items">
+      <p v-if="item.show">{{ item.name }}</p>
+      <button @click="toggleItem(item)">Toggle</button>
     </div>
-
-    <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        :total="articles.length">
-    </el-pagination>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ex",
   data() {
     return {
-      articles: [
-        {id: 1, title: 'Article 1', content: 'Content of article 1'},
-        {id: 2, title: 'Article 2', content: 'Content of article 2'},
-        {id: 3, title: 'Article 3', content: 'Content of article 3'},
-        // Add more articles as needed
-      ],
-      pageSize: 2, // Number of articles per page
-      currentPage: 1 // Current page number
-    }
-  },
-  computed: {
-    paginatedArticles() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      return this.articles.slice(startIndex, startIndex + this.pageSize);
-    }
+      items: [
+        {id: 1, name: 'Item 1', show: true},
+        {id: 2, name: 'Item 2', show: false},
+        {id: 3, name: 'Item 3', show: true}
+      ]
+    };
   },
   methods: {
-    handleCurrentChange(page) {
-      this.currentPage = page;
+    toggleItem(item) {
+      item.show = !item.show;
     }
-  },
-  created() {
-
-  },
-
-}
+  }
+};
 </script>
 
 <style scoped>

@@ -32,7 +32,7 @@
                     <div style="font-size: 20px; height:28px">{{ type.groupName }}</div>
                     <div style="font-size: 15px; height:26px;color: #8c939d">{{ type.counts }}个成员</div>
                     <div>
-                      <el-button id=1 type="text" class="button" style="color:#CA7158"
+                      <el-button id=1 type="text" class="el_link" style="color:#CA7158"
                                  @click="open(j)" v-bind:disabled="btnStatus">
                         +加入小组
                       </el-button>
@@ -284,7 +284,7 @@ export default {
     },
     joins() {
       this.sum = this.sum + 1;
-      document.getElementsByClassName("button").innerHTML = "已加入";
+      document.getElementsByClassName("el_link").innerHTML = "已加入";
       this.btnStatus = true;
     }
 
@@ -335,7 +335,7 @@ export default {
   line-height: 12px;
 }
 
-.button {
+.el_link {
   padding: 0;
   /*float: right;*/
 }

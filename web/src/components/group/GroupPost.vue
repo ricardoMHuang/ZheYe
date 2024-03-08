@@ -77,7 +77,7 @@
               <div style="font-size: 20px">{{ type.groupName }}</div>
               <div style="font-size: 15px">{{ type.counts }}个成员</div>
               <div>
-                <el-button type="text" class="button" style="color:#CA7158">+加入小组</el-button>
+                <el-button type="text" class="el_link" style="color:#CA7158">+加入小组</el-button>
               </div>
             </div>
           </div>

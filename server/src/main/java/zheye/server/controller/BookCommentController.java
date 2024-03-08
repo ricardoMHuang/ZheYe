@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import zheye.server.utils.Result;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -28,7 +29,7 @@ public class BookCommentController {
     }
 
     @PostMapping("/getComment")
-    public Result getComment(@RequestBody int id) {
+    public Result getComment(@RequestBody int id) throws InvocationTargetException, IllegalAccessException {
         return Result.ok(bookCommentService.getComment(id)).message("获取评论成功");
     }
 

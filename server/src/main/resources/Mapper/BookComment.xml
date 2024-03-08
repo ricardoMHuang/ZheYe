@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zheye.server.mapper.BookCommentMapper">
+    <select id="selectUserAndCommentList" parameterType="integer" resultMap="UserCommentResultMap">
+        select front_user.nickname       as nickname,
+               front_user.avatar         as avatar,
+               book_comment.id           as id,
+               book_comment.book_id      as book_id,
+               book_comment.user_id      as user_id,
+               book_comment.rate         as rate,
+               book_comment.publish_time as publish_time,
+               book_comment.comment_id   as comment_id,
+               book_comment.support_num  as support_num,
+               book_comment.content      as content
+        from front_user
+                 right join book_comment on (front_user.id = book_comment.user_id)
+        where book_comment.book_id = #{id}
+    </select>
+    <resultMap id="UserCommentResultMap" type="zheye.server.entity.UserComment">
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+        <result property="id" column="id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rate" column="rate"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="supportNum" column="support_num"/>
+        <result property="content" column="content"/>
+
+        <!-- 其他字段的映射 -->
+    </resultMap>
+
+</mapper>

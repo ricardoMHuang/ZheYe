@@ -33,5 +33,9 @@ public class BookComment extends Model<BookComment> {
 
     private Float rate;
 
+    private int commentId;
+
+    private int supportNum;
+
 }
 

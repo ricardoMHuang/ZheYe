@@ -3,6 +3,8 @@ package zheye.server.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import zheye.server.entity.BookComment;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * (BookComment)表服务接口
  *
@@ -13,6 +15,6 @@ public interface BookCommentService extends IService<BookComment> {
 
     void commentSet(BookComment comment);
 
-    Object getComment(int id);
+    Object getComment(int id) throws InvocationTargetException, IllegalAccessException;
 }
 
