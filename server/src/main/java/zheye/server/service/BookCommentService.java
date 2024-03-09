@@ -16,5 +16,9 @@ public interface BookCommentService extends IService<BookComment> {
     void commentSet(BookComment comment);
 
     Object getComment(int id) throws InvocationTargetException, IllegalAccessException;
+
+    int updateComment(BookComment comment);
+
+
 }
 

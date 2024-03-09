@@ -7,4 +7,8 @@ export default {
     async getComment(params) {
         return await http.post("frontApi/bookDetail/getComment", params);
     },
+    async updateComment(comment) {
+        return await http.post("frontApi/bookDetail/updateComment", comment);
+
+    },
 }

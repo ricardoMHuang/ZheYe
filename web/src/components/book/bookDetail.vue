@@ -117,6 +117,7 @@
     <!--      评论-->
     <h3>评论</h3>
     <div v-for="(comment,index) in commentList " style="position:relative;">
+
       <div style="margin-top: 40px">
         <el-avatar size="large" :src="comment.avatar"></el-avatar>
         <div style="display: inline-block;padding: 10px">
@@ -124,15 +125,16 @@
           <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
         </div>
       </div>
+
       <div style="display: flex;flex-wrap: wrap">
         <p style="margin: 0 50px;width: 65%; ">
           {{ comment.content }}
         </p>
         <el-link :underline="false" @click="support(comment)" class="el_link">{{ comment.supportNum }} <i
-            class="el-icon-thumb" :style="{color:supportColor }"></i></el-link>
+            class="el-icon-thumb" :style="{color:comment.supportColor }"></i></el-link>
         <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
-        <div style="background-color: #f9f8f4;border-radius:5px;width:100%;padding: 0 0 0 100px ; "
-             v-show="showChildComment" v-for="(childComment,index) in comment.childComment">
+        <!--        子评论组件-->
+        <div v-for="(childComment,index) in comment.childComment" class="childComment" v-if="!comment.showChildComment">
           <div style="margin-top: 40px">
             <el-avatar size="large" :src="comment.avatar"></el-avatar>
             <div style="display: inline-block;padding: 10px">
@@ -140,24 +142,25 @@
               <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
             </div>
           </div>
+
           <div style="display: flex">
             <p style="margin: 0 50px;width: 65%; ">
               {{ childComment.content }}
             </p>
-            <el-link :underline="false" class="el_link">{{ childComment.supportNum }} <i
-                class="el-icon-thumb" :style="{color:supportColor }"></i></el-link>
+            <el-link :underline="false" class="el_link" @click="support(childComment)">{{ childComment.supportNum }} <i
+                class="el-icon-thumb" :style="{color:childComment.supportColor }"></i></el-link>
             <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
           </div>
           <el-divider></el-divider>
-
         </div>
-        <el-link class="el_link" v-if="comment.childComment.length" @click="showChildComment = !showChildComment;"
+        <el-link class="el_link" v-if="comment.childComment.length"
+                 @click="comment.showChildComment = !comment.showChildComment;"
                  :underline="false">更多 <i class="el-icon-arrow-down"></i></el-link>
       </div>
 
       <el-divider></el-divider>
     </div>
-
+    <el-empty description="等待你的评论哦" v-if="!commentList.length"></el-empty>
   </div>
 
 </template>
@@ -166,6 +169,7 @@
 import directoryApi from "@/../api/directory";
 import articleApi from "../../../api/article";
 import bookDetailApi from "../../../api/bookDetail";
+import supportApi from "../../../api/support";
 import userApi from "../../../api/user";
 import bookCollectApi from "../../../api/bookCollect";
 // collapse 展开折叠
@@ -205,25 +209,19 @@ export default {
       directory: {},
       article: {},
       commentList: [],
-      users: [],
-      showChildComment: false,
+      userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+      supportColor: "black",
     }
   },
   mounted() {
     this.init();
   },
-  computed: {
-    supportColor() {
-      return "red"
-    }
-  },
+  computed: {},
 
   methods: {
     async init() {
       this.author = JSON.parse(this.$route.query.author);
       this.book = JSON.parse(this.$route.query.book);
-      console.log(this.author);
-      console.log(this.book);
       //根据bookId和userId查询收藏表，返回state判断该用户是否收藏
       let isCollect = await bookCollectApi.selectBookCollect({
         userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
@@ -251,22 +249,21 @@ export default {
       } else {
         this.article = "";
       }
+      await this.getCommentList();
 
+    },
+    async getCommentList() {
       //根据书的id请求评论表
       let commentList = await bookDetailApi.getComment(this.book.id);
       this.commentList = commentList.data.data;
+      this.commentList.forEach(item => {
+        this.$set(item, 'showChildComment', 'false');
+      });
       console.log(this.commentList)
-      if (this.commentList) {
+      await this.addColorFlag();
+      console.log(this.commentList)
+      if (this.commentList.length !== 0) {
         console.log(this.commentList);
-        for (let i = 0; i < this.commentList.length; i++) {
-          this.commentList[i].flag = false;
-          let userResult = await userApi.getReplyer(this.commentList[i].userId);
-          if (userResult.data.data) {
-            this.users.push(userResult.data.data);
-          } else {
-            this.users = "";
-          }
-        }
       } else {
         this.commentList = "";
         console.log(this.commentList + "暂无评论");
@@ -277,7 +274,28 @@ export default {
       this.ruleForm.comment = "";
       this.ruleForm.rate = "";
     },
-
+    async addColorFlag() {
+      for (const item of this.commentList) {
+        let colorFlag = await supportApi.select({userId: item.userId, supportCommentId: item.id})
+        console.log(colorFlag)
+        colorFlag = colorFlag.data
+        if (colorFlag.code === 200) {
+          this.$set(item, "supportColor", 'red')
+        } else {
+          this.$set(item, "supportColor", 'black')
+        }
+        for (const childItem of item.childComment) {
+          colorFlag = await supportApi.select({userId: childItem.userId, supportCommentId: childItem.id})
+          colorFlag = colorFlag.data
+          console.log(colorFlag)
+          if (colorFlag.code === 200) {
+            this.$set(childItem, "supportColor", 'red')
+          } else {
+            this.$set(childItem, "supportColor", 'black')
+          }
+        }
+      }
+    },
     // 提交评论和评分
     async submit(formName) {
       var dt = new Date();
@@ -393,21 +411,34 @@ export default {
       }
       alert(res.data.message);
     },
-    //展开更多评论
-    async more() {
-      if (this.showCommentsNumber < this.commentList.length) {
-        this.showCommentsNumber += 4;
-      } else {
-        this.showCommentsNumber = 2;
-
-      }
-    },
     //显示评论框
     showInput(comment) {
 
     },
-    support(comment) {
-      this.commentList
+    async support(comment) {
+      let res1;
+      if (comment.supportColor === "black") {
+        res1 = await supportApi.insertSupport({userId: this.userId, supportCommentId: comment.id});
+        if (res1.data.code === 200) {
+          comment.supportNum += 1;
+          comment.supportColor = "red"
+        }
+      } else {
+        res1 = await supportApi.deleteSupport({userId: this.userId, supportCommentId: comment.id});
+        if (res1.data.code === 200) {
+          comment.supportNum -= 1;
+          comment.supportColor = "black"
+        }
+      }
+      res1 = res1.data;
+      console.log(res1);
+      let res2;
+      if (res1.code === 200) {
+        res2 = await bookDetailApi.updateComment(comment);
+      }
+      res2 = res2.data
+      console.log(res2)
+
     },
     //返回上一级
     goBack() {
@@ -445,5 +476,12 @@ export default {
 .el_link {
   height: 40px;
   width: 8%;
+}
+
+.childComment {
+  background-color: #f9f8f4;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0 0 0 100px;
 }
 </style>

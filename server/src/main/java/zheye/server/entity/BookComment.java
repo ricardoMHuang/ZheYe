@@ -37,5 +37,6 @@ public class BookComment extends Model<BookComment> {
 
     private int supportNum;
 
+
 }
 

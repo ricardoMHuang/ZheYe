@@ -2,6 +2,7 @@ package zheye.server.controller;
 
 
 import zheye.server.entity.BookComment;
+import zheye.server.entity.Support;
 import zheye.server.service.BookCommentService;
 import org.springframework.web.bind.annotation.*;
 import zheye.server.utils.Result;
@@ -31,6 +32,16 @@ public class BookCommentController {
     @PostMapping("/getComment")
     public Result getComment(@RequestBody int id) throws InvocationTargetException, IllegalAccessException {
         return Result.ok(bookCommentService.getComment(id)).message("获取评论成功");
+    }
+
+    @PostMapping("/updateComment")
+    public Result updateComment(@RequestBody BookComment comment) {
+        System.out.println(comment.getSupportNum());
+        if (bookCommentService.updateComment(comment) != 0) {
+            return Result.ok().message("更新评论成功");
+        } else {
+            return Result.error().message("更新失败");
+        }
     }
 
 }

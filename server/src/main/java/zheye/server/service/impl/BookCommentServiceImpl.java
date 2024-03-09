@@ -3,8 +3,6 @@ package zheye.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import zheye.server.entity.Book;
 import zheye.server.entity.BookComment;
 import zheye.server.entity.UserComment;
 import zheye.server.mapper.BookCommentMapper;
@@ -34,7 +32,6 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
 
         List<UserComment> commentList = baseMapper.selectUserAndCommentList(id);
         System.out.println("_________________________________");
-        System.out.println(commentList.toArray().length);
         System.out.println(commentList);
 //        按点赞数将评论排序
         commentList.sort(new Comparator<UserComment>() {
@@ -61,5 +58,15 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
         System.out.println(obj);
         return obj;
     }
+
+    @Override
+    public int updateComment(BookComment comment) {
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", comment.getCommentId());
+        System.out.println("受影响行数：" + baseMapper.updateById(comment));
+        return baseMapper.updateById(comment);
+    }
+
+
 }
 

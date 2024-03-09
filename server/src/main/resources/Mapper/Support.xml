@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zheye.server.mapper.SupportMapper">
+    <select id="MultiId" parameterType="zheye.server.entity.Support" resultType="zheye.server.entity.Support">
+        select *
+        from support
+        where user_id = #{userId}
+          and support_comment_id = #{supportCommentId}
+    </select>
+    <delete id="deleteByMutiId" parameterType="zheye.server.entity.Support">
+        delete
+        from support
+        where user_id = #{userId}
+          and support_comment_id = #{supportCommentId}
+    </delete>
+</mapper>

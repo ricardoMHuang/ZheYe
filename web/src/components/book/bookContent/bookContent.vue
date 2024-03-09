@@ -131,6 +131,7 @@ export default {
     async getBookChapter(bookId) {
       let res = await directoryApi.getBookChapter(bookId);
       this.bookChapters = res.data.data;
+      console.log(this.bookChapters)
     },
     //打开对应章节
     openChapter(index) {
