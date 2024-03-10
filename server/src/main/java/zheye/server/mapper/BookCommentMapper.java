@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface BookCommentMapper extends BaseMapper<BookComment> {
 
-    List<UserComment> selectUserAndCommentList(int id);
+    List<UserComment> selectUserAndCommentList(int bookId);
 
 }

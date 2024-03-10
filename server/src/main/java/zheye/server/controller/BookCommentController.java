@@ -30,8 +30,8 @@ public class BookCommentController {
     }
 
     @PostMapping("/getComment")
-    public Result getComment(@RequestBody int id) throws InvocationTargetException, IllegalAccessException {
-        return Result.ok(bookCommentService.getComment(id)).message("获取评论成功");
+    public Result getComment(@RequestBody int bookId) throws InvocationTargetException, IllegalAccessException {
+        return Result.ok(bookCommentService.getComment(bookId)).message("获取评论成功");
     }
 
     @PostMapping("/updateComment")
@@ -41,6 +41,15 @@ public class BookCommentController {
             return Result.ok().message("更新评论成功");
         } else {
             return Result.error().message("更新失败");
+        }
+    }
+
+    @PostMapping("/getCommentById")
+    public Result getCommentById(@RequestBody int id) {
+        if (bookCommentService.getCommentById(id) != null) {
+            return Result.ok(bookCommentService.getCommentById(id)).message("查找成功");
+        } else {
+            return Result.error().message("查找失败");
         }
     }
 

@@ -11,4 +11,7 @@ export default {
         return await http.post("frontApi/bookDetail/updateComment", comment);
 
     },
+    async getCommentById(id) {
+        return await http.post("frontApi/bookDetail/getCommentById", id);
+    }
 }

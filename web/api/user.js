@@ -21,12 +21,16 @@ export default {
     },
 
     /*获取回复人信息*/
-    async getReplyer(params) {
-        return await http.post("frontApi/user/getReplyer", params);
+    async getReplyer(id) {
+        return await http.post("frontApi/user/getReplyer", id);
     },
     /*获取回复人信息*/
     async updateInfo(params) {
         return await http.post("frontApi/user/updateInfo", params);
     },
 
+    async selectNickname(id) {
+        return await http.post("frontApi/user/selectNickname", id);
+
+    }
 }

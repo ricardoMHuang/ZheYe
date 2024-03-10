@@ -25,7 +25,7 @@ public class DirectoryServiceImpl extends ServiceImpl<DirectoryMapper, Directory
         queryWrapper.eq("book_id", id);
         if (ObjectUtils.isNotEmpty(baseMapper.selectOne(queryWrapper))) {
 
-            System.out.print(baseMapper.selectOne(queryWrapper));
+//            System.out.print(baseMapper.selectOne(queryWrapper));
             return baseMapper.selectOne(queryWrapper);
         } else {
             return null;
@@ -37,10 +37,10 @@ public class DirectoryServiceImpl extends ServiceImpl<DirectoryMapper, Directory
         if (ObjectUtils.isNotEmpty(baseMapper.selectChapter(bookId))) {
             //遍历排序好的list，一定要放进LinkedHashMap，因为只有LinkedHashMap是根据插入顺序进行存储
             LinkedHashMap<String, String> map = new LinkedHashMap<>();
-            System.out.println(baseMapper.selectChapter(bookId));
+//            System.out.println(baseMapper.selectChapter(bookId));
             baseMapper.selectChapter(bookId).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(x -> map.put(x.getKey(), x.getValue()));
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
-            System.out.println(map);
+//            System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
+//            System.out.println(map);
             return map;
         } else {
             return null;

@@ -51,10 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
         queryWrapper.eq(!ObjectUtils.isEmpty(user.getEmail()), "email", user.getEmail());
         User arr1 = baseMapper.selectOne(queryWrapper);
-        System.out.println(arr1);
+//        System.out.println(arr1);
         queryWrapper.eq(!ObjectUtils.isEmpty(user.getPassword()), "password", user.getPassword());
         User arr = baseMapper.selectOne(queryWrapper);
-        System.out.println(arr);
+//        System.out.println(arr);
         return baseMapper.exists(queryWrapper);
 
     }
@@ -74,10 +74,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public String selectNickname(int id) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        return baseMapper.selectNickname(id);
+    }
+
+    @Override
     public User findUserList(User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!ObjectUtils.isEmpty(user.getEmail()), "email", user.getEmail());
-        System.out.print(baseMapper.selectMaps(queryWrapper));
+//        System.out.print(baseMapper.selectMaps(queryWrapper));
         return baseMapper.selectOne(queryWrapper);
     }
 

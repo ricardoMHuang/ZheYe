@@ -134,32 +134,51 @@
             class="el-icon-thumb" :style="{color:comment.supportColor }"></i></el-link>
         <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
         <!--        子评论组件-->
-        <div v-for="(childComment,index) in comment.childComment" class="childComment" v-if="!comment.showChildComment">
+        <div v-for="(childComment,index) in comment.childCommentList" class="childComment"
+             v-if="!comment.showChildComment">
           <div style="margin-top: 40px">
-            <el-avatar size="large" :src="comment.avatar"></el-avatar>
+            <el-avatar size="large" :src="childComment.avatar"></el-avatar>
             <div style="display: inline-block;padding: 10px">
-              <div>{{ comment.nickname }}</div>
-              <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
+              <div>{{ childComment.nickname }}</div>
+              <div style="color: #999999"> {{ childComment.publishTime }} 回复 {{ childComment.reviewerName }}</div>
             </div>
           </div>
-
           <div style="display: flex">
             <p style="margin: 0 50px;width: 65%; ">
               {{ childComment.content }}
             </p>
             <el-link :underline="false" class="el_link" @click="support(childComment)">{{ childComment.supportNum }} <i
                 class="el-icon-thumb" :style="{color:childComment.supportColor }"></i></el-link>
-            <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
+            <el-link :underline="false" class="el_link" @click="showInput(childComment)">回复</el-link>
           </div>
           <el-divider></el-divider>
         </div>
-        <el-link class="el_link" v-if="comment.childComment.length"
+
+        <el-link class="el_link" v-if="comment.childCommentList.length"
                  @click="comment.showChildComment = !comment.showChildComment;"
                  :underline="false">更多 <i class="el-icon-arrow-down"></i></el-link>
       </div>
 
       <el-divider></el-divider>
+
     </div>
+    <!--    回复评论框-->
+    <el-drawer
+        :title="reviewerTitle"
+        :visible.sync="drawer"
+        :direction="direction" style="width: 60%;margin: auto">
+      <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px">
+        <el-form-item label="评论框" prop="checkComment" style="margin: 20px">
+          <el-input type="textarea" v-model="ruleForm2.checkComment" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        </el-form-item>
+      </el-form>
+
+    </el-drawer>
+    <!--    空评论状态-->
     <el-empty description="等待你的评论哦" v-if="!commentList.length"></el-empty>
   </div>
 
@@ -178,20 +197,22 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 export default {
   name: "newBook",
   data() {
-    var validateRate = (rule, value, callback) => {
+    let validateRate = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请评分'));
       } else {
         callback();
       }
     };
-
     return {
-
+      drawer: false,
+      direction: 'btt',
+      reviewer: "",
       state: false,
       dialogVisible: false,
       dialogTwoVisible: false,
       title: '',
+      textarea: "请友善发言",
       ruleForm: {
         comment: '',
         rate: 0,
@@ -202,6 +223,13 @@ export default {
           {validator: validateRate, trigger: 'blur'}
         ],
       },
+      ruleForm2: {
+        checkComment: '',
+      },
+      rules2: {
+        checkComment: [{required: true, message: "评论不能为空", trigger: 'blur'}],
+
+      },
       id: this.$route.query.id,
       value: 4,
       author: {name: "作者名字", image: "https://img3.doubanio.com/icon/up263944680-3.jpg",},
@@ -211,6 +239,8 @@ export default {
       commentList: [],
       userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
       supportColor: "black",
+      reviewerTitle: "",
+      commentId: "",
     }
   },
   mounted() {
@@ -259,8 +289,9 @@ export default {
       this.commentList.forEach(item => {
         this.$set(item, 'showChildComment', 'false');
       });
-      console.log(this.commentList)
       await this.addColorFlag();
+      await this.addNickname();
+      await this.addReviewerName();
       console.log(this.commentList)
       if (this.commentList.length !== 0) {
         console.log(this.commentList);
@@ -276,18 +307,17 @@ export default {
     },
     async addColorFlag() {
       for (const item of this.commentList) {
-        let colorFlag = await supportApi.select({userId: item.userId, supportCommentId: item.id})
-        console.log(colorFlag)
+        let colorFlag = await supportApi.select({userId: this.userId, supportCommentId: item.id})
         colorFlag = colorFlag.data
+        console.log(colorFlag)
         if (colorFlag.code === 200) {
           this.$set(item, "supportColor", 'red')
         } else {
           this.$set(item, "supportColor", 'black')
         }
-        for (const childItem of item.childComment) {
-          colorFlag = await supportApi.select({userId: childItem.userId, supportCommentId: childItem.id})
+        for (const childItem of item.childCommentList) {
+          colorFlag = await supportApi.select({userId: this.userId, supportCommentId: childItem.id})
           colorFlag = colorFlag.data
-          console.log(colorFlag)
           if (colorFlag.code === 200) {
             this.$set(childItem, "supportColor", 'red')
           } else {
@@ -295,6 +325,77 @@ export default {
           }
         }
       }
+    },
+    async addNickname() {
+      for (const item of this.commentList) {
+        let nickname;
+        nickname = await userApi.selectNickname(item.userId)
+        nickname = nickname.data
+        console.log(nickname)
+        if (nickname.code === 200) {
+          nickname = nickname.data
+          this.$set(item, "nickname", nickname)
+        }
+        for (const childItem of item.childCommentList) {
+          nickname = await userApi.selectNickname(childItem.userId)
+          nickname = nickname.data
+          if (nickname.code === 200) {
+            nickname = nickname.data
+            this.$set(childItem, "nickname", nickname)
+          }
+        }
+      }
+    },
+    async addReviewerName() {
+      for (const item of this.commentList) {
+        let ReviewerName;
+        for (const childItem of item.childCommentList) {
+          let comment = await bookDetailApi.getCommentById(childItem.commentId);
+          comment = comment.data;
+          let userId;
+          if (comment.code === 200) {
+            comment = comment.data
+            userId = comment.userId;
+          }
+          ReviewerName = await userApi.selectNickname(userId)
+          ReviewerName = ReviewerName.data
+          if (ReviewerName.code === 200) {
+            ReviewerName = ReviewerName.data
+            this.$set(childItem, "reviewerName", ReviewerName)
+          }
+        }
+      }
+    },
+    //提交评论
+    async submitForm(formName) {
+      console.log(formName)
+      this.$refs[formName].validate(async (valid) => {
+        console.log(valid);
+        if (valid) {
+          let dt = new Date();
+          let year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let day = dt.getDate();
+          let time = year + "-" + month + "-" + day;
+          console.log(time)
+          let res = await bookDetailApi.submitComment({
+            userId: this.userId,
+            content: this.ruleForm2.checkComment,
+            bookId: this.book.id,
+            commentId: this.commentId,
+            publish_time: time
+          });
+          console.log(res.data)
+          this.drawer = false;
+          this.$message({
+            message: '已评论',
+            type: 'success'
+          });
+          await this.getCommentList();
+        } else {
+          console.log('error submit!!');
+        }
+      });
     },
     // 提交评论和评分
     async submit(formName) {
@@ -313,7 +414,7 @@ export default {
             type: ''
           }).then(async () => {
             let res = await bookDetailApi.submitComment({
-              userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+              userId: this.userId,
               content: this.ruleForm.comment,
               rate: this.ruleForm.rate,
               bookId: this.book.id,
@@ -338,6 +439,10 @@ export default {
       });
     },
 
+    resetForm(formName) {
+      console.log(this.ruleForm2)
+      this.$refs[formName].resetFields();
+    },
     open(buttonNumber) {
       //打开提交框
       this.dialogVisible = true;
@@ -411,10 +516,7 @@ export default {
       }
       alert(res.data.message);
     },
-    //显示评论框
-    showInput(comment) {
-
-    },
+    //点赞
     async support(comment) {
       let res1;
       if (comment.supportColor === "black") {
@@ -439,6 +541,31 @@ export default {
       res2 = res2.data
       console.log(res2)
 
+    },
+
+    //获得回复对象
+    async getReviewer(commentId) {
+      let comment = await bookDetailApi.getCommentById(commentId);
+      comment = comment.data;
+      console.log(comment)
+      let user;
+      if (comment.code === 200) {
+        comment = comment.data
+        user = await userApi.getReplyer(comment.userId);
+        user = user.data;
+      }
+      if (user.code === 200) {
+        user = user.data;
+      }
+      console.log(user)
+      this.reviewer = user.nickname;
+    },
+    //显示评论框
+    showInput(comment) {
+      this.drawer = true
+      let reviewerName = comment.nickname;
+      this.reviewerTitle = "回复 " + reviewerName;
+      this.commentId = comment.id
     },
     //返回上一级
     goBack() {

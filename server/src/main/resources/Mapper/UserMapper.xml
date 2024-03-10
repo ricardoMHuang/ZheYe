@@ -5,7 +5,11 @@
 <mapper namespace="zheye.server.mapper.UserMapper">
     <select id="findbyid" resultType="java.util.Map">
         select *
-        from user
+        from front_user
     </select>
-
+    <select id="selectNickname" resultType="String">
+        select nickname
+        from front_user
+        where id = #{id}
+    </select>
 </mapper>

@@ -24,7 +24,6 @@ public class SupportController {
             return Result.error().message("已经点赞了");
         }
     }
-
     @PostMapping("/deleteSupport")
     public Result deleteSupport(@RequestBody Support support) {
         if (supportService.select(support) != null) {
@@ -33,7 +32,6 @@ public class SupportController {
             return Result.error().message("未点赞");
         }
     }
-
     @PostMapping("/select")
     public Result select(@RequestBody Support support) {
         if (supportService.select(support) != null) {

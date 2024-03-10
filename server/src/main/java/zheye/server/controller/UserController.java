@@ -60,4 +60,13 @@ public class UserController {
         userService.updateUser(user);
         return Result.ok().message("用户更新成功");
     }
+
+    @PostMapping("/selectNickname")
+    public Result selectNickname(@RequestBody int id) {
+        if (userService.selectNickname(id) != null)
+            return Result.ok(userService.selectNickname(id)).message("搜索成功");
+        else {
+            return Result.error().message("该用户不存在");
+        }
+    }
 }

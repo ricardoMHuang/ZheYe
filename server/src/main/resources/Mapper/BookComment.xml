@@ -14,7 +14,7 @@
                book_comment.content      as content
         from front_user
                  right join book_comment on (front_user.id = book_comment.user_id)
-        where book_comment.book_id = #{id}
+        where book_comment.book_id = #{bookId}
     </select>
     <resultMap id="UserCommentResultMap" type="zheye.server.entity.UserComment">
         <result property="nickname" column="nickname"/>

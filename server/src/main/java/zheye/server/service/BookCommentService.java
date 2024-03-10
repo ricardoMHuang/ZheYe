@@ -3,6 +3,7 @@ package zheye.server.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import zheye.server.entity.BookComment;
 
+import javax.xml.stream.events.Comment;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -20,5 +21,6 @@ public interface BookCommentService extends IService<BookComment> {
     int updateComment(BookComment comment);
 
 
+    BookComment getCommentById(int id);
 }
 
