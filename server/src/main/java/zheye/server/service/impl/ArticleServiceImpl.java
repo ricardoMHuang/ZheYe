@@ -29,6 +29,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Article getArticleInt(int id) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id);
+//        System.out.println(baseMapper.selectOne(queryWrapper));
         return baseMapper.selectOne(queryWrapper);
     }
 }

@@ -5,7 +5,7 @@ export default {
         return await http.post("frontApi/list", params);
     },
     async getUserInfo(params) {
-        return await http.post("/frontApi/user/info", params);
+        return await http.post("/frontApi/user/getUserInfo", params);
     },
     async getUserArticle(params) {
         return await http.post("/frontApi/user/article", params);

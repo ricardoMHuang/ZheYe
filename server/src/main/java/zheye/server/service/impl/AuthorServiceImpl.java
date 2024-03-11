@@ -32,5 +32,10 @@ public class AuthorServiceImpl extends ServiceImpl<AuthorMapper, Author> impleme
         }
         return authors;
     }
+
+    @Override
+    public Author getAuthorById(int authorId) {
+        return baseMapper.getAuthorById(authorId);
+    }
 }
 

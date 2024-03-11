@@ -25,8 +25,7 @@
                 style="width: 1200px"
             >
               <el-menu-item
-                  index="/personCenter/info"
-              >
+                  index="/personCenter/info">
                 <i class="el-icon-user"></i>
                 <span slot="title">个人简介</span>
               </el-menu-item>

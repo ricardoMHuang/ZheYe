@@ -72,6 +72,8 @@
 <script>
 
 import directoryApi from "../../../../api/directory";
+import bookApi from "../../../../api/book";
+import authorApi from "../../../../api/author";
 
 export default {
   name: "bookConnect",
@@ -95,7 +97,9 @@ export default {
       lineHeight: 2,//控制字体行高
       showFontChangeInput: false,//控制是否显示更改字体输入框
       pageSize: 2, // Number of articles per page
-      currentPage: 1 // Current page number
+      currentPage: 1, // Current page number
+      bookId: JSON.parse(this.$route.query.bookId),
+
     }
   },
   mounted() {
@@ -109,13 +113,21 @@ export default {
   },
   methods: {
     async init() {
-      this.book = JSON.parse(this.$route.query.book);
-      console.log(this.book)
+      await this.getBook();
       await this.getBookChapter(this.book.id);
       await setTimeout(() => {
         this.getBookContent(this.book.id)
       }, 200);
       this.isEmptyContent();
+    },
+    //获取书的基本信息
+    async getBook() {
+      let book = await bookApi.getBookById(this.bookId);
+      book = book.data;
+      if (book.code === 200) {
+        this.book = book.data;
+      }
+      console.log(book.message)
     },
     //获取整本书
     async getBookContent(bookId) {

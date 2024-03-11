@@ -1,6 +1,7 @@
 package zheye.server.controller;
 
 
+import zheye.server.entity.Article;
 import zheye.server.service.ArticleService;
 import org.springframework.web.bind.annotation.*;
 import zheye.server.utils.Result;
@@ -29,7 +30,12 @@ public class ArticleController {
 
     @PostMapping("/articlePlease")
     public Result getArticleItem(@RequestBody int id) {
-        return Result.ok(articleService.getArticleInt(id));
+        Article article = articleService.getArticleInt(id);
+        if (article != null) {
+            return Result.ok(article).message("获取推文成功");
+        } else {
+            return Result.error().message("获取推文失败");
+        }
     }
 }
 

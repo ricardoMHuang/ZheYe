@@ -30,5 +30,9 @@
 
         <!-- 其他字段的映射 -->
     </resultMap>
-
+    <select id="selectByUserId" parameterType="Integer" resultType="zheye.server.entity.BookComment">
+        select *
+        from book_comment
+        where user_id = #{userId}
+    </select>
 </mapper>

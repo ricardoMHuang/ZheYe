@@ -54,12 +54,6 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
             }
             map.put(userComment.getId(), userComment.getCommentId());
         }
-        System.out.println();
-        System.out.println(parentCommentList);
-        System.out.println();
-        System.out.println(allChildCommentList);
-        System.out.println();
-        System.out.println(map);
         //更新map
         for (UserComment userComment : commentList) {
             int parentId = userComment.getCommentId();
@@ -73,8 +67,6 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
                 map.put(oldId, parentId);
             }
         }
-        System.out.println();
-        System.out.println(map);
         List<Object> obj = new ArrayList<>();
         Map<String, Object> propertiesMap = new HashMap<>();
         for (UserComment parentComment : parentCommentList) {
@@ -89,21 +81,6 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
             propertiesMap.put("childCommentList", childCommentList);
             obj.add(ReflectUtil.getObject(parentComment, propertiesMap));
         }
-        System.out.println(obj);
-//        for (int i = 0; i < commentList.toArray().length; i++) {
-//            List<UserComment> childComment = new ArrayList<>();
-//            for (int j = 0; j < commentList.toArray().length; j++) {
-//                if (i != j && commentList.get(j).getCommentId() != 0 && commentList.get(i).getId() == commentList.get(j).getCommentId() && commentList.get(i).getCommentId() == 0) {
-//                    childComment.add(commentList.get(j));
-//                }
-//            }
-//            if (commentList.get(i).getCommentId() == 0) {
-//                System.out.println("childComment " + childComment);
-//                propertiesMap.put("childComment", childComment);
-//                obj.add(ReflectUtil.getObject(commentList.get(i), propertiesMap));
-//            }
-//        }
-//        System.out.println();
 //        System.out.println(obj);
         return obj;
     }
@@ -121,6 +98,20 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
         QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id);
         return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public List<BookComment> getCommentByUserId(int userId) {
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        return baseMapper.selectByUserId(userId);
+    }
+
+    @Override
+    public List<BookComment> selectCommentByCommentId(int commentId) {
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("comment_id", commentId);
+        return baseMapper.selectList(queryWrapper);
     }
 
 

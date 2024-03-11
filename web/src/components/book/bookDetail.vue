@@ -191,8 +191,8 @@ import bookDetailApi from "../../../api/bookDetail";
 import supportApi from "../../../api/support";
 import userApi from "../../../api/user";
 import bookCollectApi from "../../../api/bookCollect";
-// collapse 展开折叠
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import bookApi from "../../../api/book"
+import authorApi from "../../../api/author"
 
 export default {
   name: "newBook",
@@ -205,6 +205,7 @@ export default {
       }
     };
     return {
+      bookId: JSON.parse(this.$route.query.bookId),
       drawer: false,
       direction: 'btt',
       reviewer: "",
@@ -246,13 +247,57 @@ export default {
   mounted() {
     this.init();
   },
+
   computed: {},
 
   methods: {
     async init() {
-      this.author = JSON.parse(this.$route.query.author);
-      this.book = JSON.parse(this.$route.query.book);
-      //根据bookId和userId查询收藏表，返回state判断该用户是否收藏
+      await this.getBookAndAuthor();
+      await this.isState();
+      await this.getDirectory();
+      await this.getArticle();
+      await this.getCommentList();
+
+    },
+    // 请求读者推文
+    async getArticle() {
+      let article = await articleApi.getArticleInt(this.book.articleId);
+      if (article.data.code === 200) {
+        this.article = article.data.data;
+      } else {
+        this.article = "";
+      }
+      console.log(article.data.message);
+      console.log(article)
+      console.log(this.article);
+    },
+    //请求目录
+    async getDirectory() {
+      let res = await directoryApi.getDirectory(this.bookId);
+      if (res.data.data) {
+        this.directory = res.data.data;
+      } else {
+        this.directory = "";
+      }
+    },
+    //获取书和作者信息
+    async getBookAndAuthor() {
+      let book = await bookApi.getBookById(this.bookId);
+      let author;
+      book = book.data;
+      if (book.code === 200) {
+        this.book = book.data;
+        author = await authorApi.getAuthorById(this.book.authorId);
+        author = author.data;
+        if (author.code === 200) {
+          this.author = author.data;
+        }
+      }
+      console.log(author.message)
+      console.log(book.message)
+    },
+    //根据bookId和userId查询收藏表，返回state判断该用户是否收藏
+    async isState() {
       let isCollect = await bookCollectApi.selectBookCollect({
         userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
         bookId: this.book.id
@@ -263,25 +308,8 @@ export default {
       } else {
         this.state = false;
       }
-
-      //请求目录
-      let res = await directoryApi.getDirectory(this.$route.query.id);
-      if (res.data.data) {
-        this.directory = res.data.data;
-      } else {
-        this.directory = "";
-      }
-
-      // 请求读者推文
-      let article = await articleApi.getArticleInt(this.book.articleId);
-      if (article.data.data) {
-        this.article = article.data.data;
-      } else {
-        this.article = "";
-      }
-      await this.getCommentList();
-
     },
+    //获取评论列表
     async getCommentList() {
       //根据书的id请求评论表
       let commentList = await bookDetailApi.getComment(this.book.id);
@@ -292,7 +320,6 @@ export default {
       await this.addColorFlag();
       await this.addNickname();
       await this.addReviewerName();
-      console.log(this.commentList)
       if (this.commentList.length !== 0) {
         console.log(this.commentList);
       } else {
@@ -300,16 +327,17 @@ export default {
         console.log(this.commentList + "暂无评论");
       }
     },
+    //取消
     clear() {
       this.dialogVisible = false;
       this.ruleForm.comment = "";
       this.ruleForm.rate = "";
     },
+
     async addColorFlag() {
       for (const item of this.commentList) {
         let colorFlag = await supportApi.select({userId: this.userId, supportCommentId: item.id})
         colorFlag = colorFlag.data
-        console.log(colorFlag)
         if (colorFlag.code === 200) {
           this.$set(item, "supportColor", 'red')
         } else {
@@ -331,7 +359,6 @@ export default {
         let nickname;
         nickname = await userApi.selectNickname(item.userId)
         nickname = nickname.data
-        console.log(nickname)
         if (nickname.code === 200) {
           nickname = nickname.data
           this.$set(item, "nickname", nickname)
@@ -460,9 +487,8 @@ export default {
       this.$router.push({
         path: '/book/article',
         query: {
-          book: JSON.stringify(this.book),
-          article: JSON.stringify(this.article),
-          author: JSON.stringify(this.author),
+          bookId: this.bookId,
+          articleId: this.article.id,
         }
       })
     },
@@ -471,7 +497,7 @@ export default {
       this.$router.push({
         path: '/bookContent',
         query: {
-          book: JSON.stringify(this.book),
+          bookId: this.bookId,
         }
       })
     },
@@ -479,7 +505,7 @@ export default {
     async addBookCollect() {
       console.log(this.book);
       let res = await bookCollectApi.addBookCollection({
-        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        userId: this.userId,
         bookName: this.book.name,
         bookId: this.book.id,
         imageUrl: this.book.image,
@@ -492,9 +518,12 @@ export default {
       console.log(res.data);
       if (res.data.success) {
         this.state = true;
-        location.reload();
+        await this.isState();
       }
-      alert(res.data.message);
+      this.$message({
+        message: '已加入书架',
+        type: 'success'
+      });
     },
     //移出书架
     async deleteBookCollect() {
@@ -512,9 +541,12 @@ export default {
       console.log(res.data);
       if (res.data.success) {
         this.state = true;
-        location.reload();
+        await this.isState();
       }
-      alert(res.data.message);
+      this.$message({
+        message: '已从书架移除',
+        type: 'success'
+      });
     },
     //点赞
     async support(comment) {
@@ -542,7 +574,6 @@ export default {
       console.log(res2)
 
     },
-
     //获得回复对象
     async getReviewer(commentId) {
       let comment = await bookDetailApi.getCommentById(commentId);

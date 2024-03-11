@@ -10,7 +10,8 @@
         <div style="color: #999999"> {{ author.name }}</div>
       </div>
       <div style="display: inline-block;position:absolute;right: 15px;top: 17px">
-        <el-button type="success" @click="addBook()">加入书架</el-button>
+        <el-button type="primary" @click="addBookCollect()" v-show="!state">加入书架</el-button>
+        <el-button type="success" @click="deleteBookCollect()" v-show="state">已加入</el-button>
       </div>
     </el-card>
     <!--    头像-->
@@ -58,7 +59,13 @@
 </template>
 
 <script>
+import bookCollectApi from "../../../api/bookCollect";
+import bookApi from "../../../api/book";
+import authorApi from "../../../api/author";
+import articleApi from "../../../api/article";
+
 export default {
+
   name: "article",
   data() {
     return {
@@ -66,6 +73,9 @@ export default {
       book: {},
       author: {},
       replyList: [],
+      state: "",
+      bookId: JSON.parse(this.$route.query.bookId),
+      articleId: JSON.parse(this.$route.query.articleId),
     }
   },
   mounted() {
@@ -73,11 +83,97 @@ export default {
   },
   methods: {
     async init() {
-      this.article = JSON.parse(this.$route.query.article);
-      this.book = JSON.parse(this.$route.query.book);
-      this.author = JSON.parse(this.$route.query.author);
-      console.log(this.article);
+      await this.getBookAndAuthor();
+      await this.getArticle();
+      this.isState();
+    },
+    //获取文章信息
+    async getArticle() {
+      let article = await articleApi.getArticleInt(this.articleId);
+      article = article.data;
+      if (article.code === 200) {
+        this.article = article.data;
+      }
+      console.log(article.message);
+
+    },
+
+    //获取书和作者信息
+    async getBookAndAuthor() {
+      let book = await bookApi.getBookById(this.bookId);
+      let author;
+      book = book.data;
+      if (book.code === 200) {
+        this.book = book.data;
+        author = await authorApi.getAuthorById(this.book.authorId);
+        author = author.data;
+        if (author.code === 200) {
+          this.author = author.data;
+        }
+      }
+      console.log(author.message)
+      console.log(book.message)
+    },
+    //根据bookId和userId查询收藏表，返回state判断该用户是否收藏
+    async isState() {
+      let isCollect = await bookCollectApi.selectBookCollect({
+        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        bookId: this.bookId
+      })
+      isCollect = isCollect.data;
+      if (isCollect.data != null && isCollect.data.state) {
+        this.state = isCollect.data.state;
+      } else {
+        this.state = false;
+      }
+    },
+
+    //移出书架
+    async deleteBookCollect() {
+      let res = await bookCollectApi.deleteBookCollection({
+        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        bookName: this.book.name,
+        bookId: this.book.id,
+        imageUrl: this.book.image,
+        author: this.author.name,
+        detail: this.book.briefIntroduction,
+        country: this.author.country,
+        state: 1
+      });
+      console.log(res);
+      console.log(res.data);
+      if (res.data.success) {
+        this.state = true;
+        await this.isState();
+      }
+      this.$message({
+        message: '已从书架移除',
+        type: 'success'
+      });
+    },
+    //加入书架
+    async addBookCollect() {
       console.log(this.book);
+      let res = await bookCollectApi.addBookCollection({
+        userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+        bookName: this.book.name,
+        bookId: this.book.id,
+        imageUrl: this.book.image,
+        author: this.author.name,
+        detail: this.book.briefIntroduction,
+        country: this.author.country,
+        state: 1
+      });
+      console.log(res);
+      console.log(res.data);
+      if (res.data.success) {
+        this.state = true;
+        await this.isState();
+      }
+      this.$message({
+        message: '已加入书架',
+        type: 'success'
+      });
     },
     //返回上一级
     goBack() {

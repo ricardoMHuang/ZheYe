@@ -15,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Repository
 public interface AuthorMapper extends BaseMapper<Author> {
 
+    Author getAuthorById(int authorId);
 }

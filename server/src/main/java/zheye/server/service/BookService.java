@@ -16,6 +16,10 @@ import java.util.List;
 public interface BookService {
     List<Book> getBooks();
 
+    String getBookName(int bookId);
+
+    Book getBookById(int bookId);
+
 
     /*  List<Book> getBooksByType();*/
 }

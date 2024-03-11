@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--    轮播图-->
     <div>
       <el-carousel :interval="5000" arrow="always" type="card">
         <el-carousel-item v-for="item in imgInfo" :key="item.id">
@@ -10,121 +11,30 @@
 
     <div style="margin: auto;width: 100%">
 
-      <!--    每周精品-->
+
       <h2>每周精品</h2>
-      <el-row style="margin-bottom: 80px;">
-        <el-col v-for="(item,index) in mostConcernBookList" :span="8" :offset="index%2 > 0 ? 3 : 0"
-                style="margin: 15px 0;">
-          <el-card :body-style="{padding: 0}" style="width: 120px;height:170px; float: left;">
-            <img :src="item.image" class="image" @click="openBook(item.id)">
-          </el-card>
-          <div style="float: left; padding: 10px; margin-left: 10px;">
-            <h3 style="">{{ item.bookName }}</h3>
-            <h4 style="color: #999999">{{ item.author }}</h4>
-            <el-rate
-                v-model="item.rate"
-                disabled
-                show-score
-                text-color="#ff9900"
-                score-template="{value}">
-            </el-rate>
-          </div>
-        </el-col>
-      </el-row>
+      <every-week :mostConcernBookList="mostConcernBookList"></every-week>
 
-      <h2>新书速递</h2>
-      <div>
-          <span style="float: right;padding-top: 20px">
-        </span>
-        <el-tabs type="card">
-          <el-tab-pane :label="item.type" v-for="(item,i) in newBookList">
-            <el-row>
-              <el-col :span="3" v-for="(newBook,j) in item.detail" v-if="newBook" :offset="2"
-                      style="padding-bottom: 25px">
-                <el-card :body-style="{ padding: '0px'}" style="width: 120px;height:170px;">
-                  <img :src="newBook.url" class="image" @click="openBook(newBook.id)">
-                </el-card>
-                <div style="padding: 10px;">
-                  <strong>{{ newBook.bookName }}</strong>
-                  <div style="margin-top: 10px">[{{ newBook.country }}]{{ newBook.author }}</div>
-                </div>
-              </el-col>
-            </el-row>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-
-      <!--    读者推文-->
       <h2>读者推文</h2>
-      <div style="background-color: #fcfbf9;padding: 20px">
-        <el-row>
-          <el-col v-for="(article,i) in articleList" :span="11" :offset="i%2 > 0 ? 1 : 0" style="margin-top: 100px; ">
-            <div style="position:relative;">
-              <el-card :body-style="{ padding: '0px'}"
-                       style=" width: 130px;height:180px; position:absolute;top:-70px;left: 20px;z-index: 1">
-                <el-image :src="article.bookImage" class="image" @click="openArticle(article.id,article)"></el-image>
-              </el-card>
-              <el-card style="">
-                <h3 style="color: #42b983; position: relative;left: 160px;width: 320px">{{ article.title }}</h3>
-                <h4 style="color: #D3DCE6; position: relative;left: 170px;">{{ article.userName }}</h4>
-                <p class="textOverflow" style="-webkit-line-clamp: 3; font-size: 15px; cursor: pointer"
-                   @click="openArticle(article.id,article)">
-                  &nbsp;&nbsp;{{ article.content }}</p>
-              </el-card>
-            </div>
-
-
-          </el-col>
-
-        </el-row>
-      </div>
-
+      <reader-article :articleList="articleList"></reader-article>
 
       <!--    分割线-->
       <el-divider></el-divider>
 
 
-      <!--      分类-->
       <div style="margin-bottom: 30px">
         <h2>分类</h2>
-        <el-row>
-          <el-col v-for="(o,index) in bookTypeList" :span="6">
-            <el-link v-if="index!==bookTypeList.length-1" :underline="false" @click="openCategory(o.type)">
-              <h3 style="margin-bottom: 0">{{ o.type }}·{{ o.totalQuantity }}本 </h3>
-              <el-divider></el-divider>
-            </el-link>
-            <el-link v-if="index===bookTypeList.length-1" @click="openCategory"><h3>查看全部 >></h3></el-link>
-          </el-col>
-        </el-row>
+        <classify :bookTypeList="bookTypeList"></classify>
+
       </div>
 
       <!--        分割线-->
       <el-divider><i class="el-icon-notebook-2"></i></el-divider>
 
-      <!--    精选书评-->
+
       <h2>精选书评</h2>
-      <div style="background-color: #fcfbf9;padding: 20px">
-        <el-row style="margin-bottom: 15px;">
-          <el-col :span="12" v-for="(o,index) in reviewList">
-            <el-card :body-style="{padding:0}" style="float: left;width: 130px">
-              <img :src="o.image" class="image" @click="openArticle">
-            </el-card>
-            <div style="float: left; padding: 10px; margin-left: 10px; width: 67%;">
-              <h3 style="margin-top: 0">{{ o.title }}</h3>
-              <div style="height: 20px">
-                <span style="float: left">{{ o.userName }} <strong>评论</strong> 《{{ o.bookName }}》</span>
-                <el-rate
-                    v-model="o.rate"
-                    disabled
-                    show-score
-                    text-color="#ff9900"
-                    score-template="{value}"></el-rate>
-              </div>
-              <p class="textOverflow" style="cursor: pointer" @click="openArticle">&nbsp;&nbsp;{{ o.article }}</p>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
+      <book-comment :reviewList="reviewList"></book-comment>
+
 
       <h2>热门标签</h2>
       <div>
@@ -135,91 +45,8 @@
         </el-row>
       </div>
 
-      <!--    排行榜-->
       <h2>排行</h2>
-      <el-row style="margin-bottom: 20px;margin-left: 40px">
-        <!--      畅销榜-->
-        <el-col :span="7">
-          <el-card style="background-color:#fcfbf9;" :body-style="{padding:0}">
-            <h3 style="padding-left: 20px">畅销榜</h3>
-            <el-row>
-              <el-col v-for="(o,index) in sellingList" :key="o" style="margin-top: 10px;">
-                <el-card shadow="hover" :body-style="{padding: '12px'}"
-                         style="border-style: hidden;background-color: #fcfbf9">
-                  <el-card :body-style="{padding: 0}" style="width: 90px;float: left;">
-                    <img :src="o.image" class="image" @click="openBook">
-                  </el-card>
-                  <div style="float: left; margin-left: 10px; line-height: 45px">
-                    <strong>{{ o.bookName }}</strong>
-                    <el-rate
-                        v-model="value"
-                        disabled
-                        show-score
-                        text-color="#ff9900"
-                        score-template="{value}">
-                    </el-rate>
-                    {{ o.author }}
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <!--      新人榜-->
-        <el-col :span="7" offset="1">
-          <el-card style="background-color:#fcfbf9;" :body-style="{padding:0}">
-            <h3 style="padding-left: 20px">新人榜</h3>
-            <el-row>
-              <el-col v-for="(o,index) in sellingList" :key="o" style="margin-top: 10px;">
-                <el-card shadow="hover" :body-style="{padding: '12px'}"
-                         style="border-style: hidden;background-color: #fcfbf9">
-                  <el-card :body-style="{padding: 0}" style="width: 90px;float: left;">
-                    <img :src="o.image" class="image" @click="openBook(o.id)">
-                  </el-card>
-                  <div style="float: left; margin-left: 10px; line-height: 45px">
-                    <strong>{{ o.bookName }}</strong>
-                    <el-rate
-                        v-model="value"
-                        disabled
-                        show-score
-                        text-color="#ff9900"
-                        score-template="{value}">
-                    </el-rate>
-                    {{ o.author }}
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <!--      连载榜-->
-        <el-col :span="7" offset="1">
-          <el-card style="background-color:#fcfbf9;" :body-style="{padding:0}">
-            <h3 style="padding-left: 20px">连载榜</h3>
-            <el-row>
-              <el-col v-for="(o,index) in sellingList" :key="o" style="margin-top: 10px;">
-                <el-card shadow="hover" :body-style="{padding: '12px'}"
-                         style="border-style: hidden;background-color: #fcfbf9">
-                  <el-card :body-style="{padding: 0}" style="width: 90px;float: left;">
-                    <img :src="o.image" class="image" @click="openBook">
-                  </el-card>
-                  <div style="float: left; margin-left: 10px; line-height: 45px">
-                    <strong>{{ o.bookName }}</strong>
-                    <el-rate
-                        v-model="value"
-                        disabled
-                        show-score
-                        text-color="#ff9900"
-                        score-template="{value}">
-                    </el-rate>
-                    {{ o.author }}
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-      </el-row>
+      <rank :sellingList="sellingList"></rank>
     </div>
   </div>
 </template>
@@ -231,9 +58,15 @@ import bookApi from "@/../api/book";
 import bookTypeApi from "@/../api/booktype";
 import authorApi from "../../../api/author"
 import articleApi from "../../../api/article"
+import Rank from "@/components/book/BookMain/Rank";
+import ReaderArticle from "@/components/book/BookMain/ReaderArticle";
+import Classify from "@/components/book/BookMain/Classify";
+import BookComment from "@/components/book/BookMain/BookComment";
+import everyWeek from "@/components/book/BookMain/everyWeek";
 
 export default {
   name: "Read",
+  components: {Rank, ReaderArticle, Classify, BookComment, everyWeek},
   data() {
     return {
       tabPosition: 'left',
@@ -242,19 +75,10 @@ export default {
       value: 3.7,
       books: [],
       authors: [],
-      imgInfo: [{id: 1, idviews: require("@/assets/photo-1.webp")}, {
-        id: 2,
-        idviews: require("@/assets/photo-1.webp")
-      }, {id: 3, idviews: require("@/assets/photo-1.webp")}],
-      newBookList: [
-        {
-          type: "科幻",
-          detail: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-        },
-        {
-          type: "武侠",
-          detail: [{}, {}, {}, {}, {}, {}, {}, {}],
-        },
+      imgInfo: [
+        {id: 1, idviews: require("@/assets/photo-1.webp")},
+        {id: 2, idviews: require("@/assets/photo-1.webp")},
+        {id: 3, idviews: require("@/assets/photo-1.webp")}
       ],
       articleList: [],
       mostConcernBookList: [{}, {}, {}, {}, {}, {}],
@@ -328,7 +152,15 @@ export default {
       ],
     }
   },
+  mounted() {
+    this.init();
+    window.addEventListener('scroll', this.initHeight);
+    this.$nextTick(() => {
+      this.offsetTop = document.querySelector('#boxFixed').offsetTop;
+    })
+  },
   methods: {
+
     /*页面初始化*/
     async init() {
       let res = await bookApi.bookItem();
@@ -358,21 +190,6 @@ export default {
           break;
         // console.log(i);
       }
-
-      //newBookList,新书速递
-      for (let i = 0; i < this.newBookList.length; i++) {
-        for (let j = 0; j < books.length; j++) {
-          if (this.newBookList[i].type === books[j].bookType) {
-            this.newBookList[i].detail[j].url = books[j].image;
-            this.newBookList[i].detail[j].id = books[j].id;
-            this.newBookList[i].detail[j].bookName = books[j].name;
-            this.newBookList[i].detail[j].country = author[j].country;
-            this.newBookList[i].detail[j].author = author[j].name;
-          } else {
-            this.newBookList[i].detail[j] = null;
-          }
-        }
-      }
       /*article列表获取*/
       res = await articleApi.getArticleItem();
       this.articleList = res.data.data;
@@ -390,21 +207,11 @@ export default {
     },
     //
     openBook(val) {
-      let book, author;
-      for (let i = 0; i < this.books.length; i++) {
-        if (this.books[i].id === val) {
-          book = this.books[i];
-          author = this.authors[i];
-        }
-
-      }
       // 变成 /user?id=1
       this.$router.push({
         path: '/book/bookDetail',
         query: {
-          id: val,
-          book: JSON.stringify(book),
-          author: JSON.stringify(author)
+          bookId: val,
         }
       })
     },
@@ -419,22 +226,12 @@ export default {
         }
       })
     },
-    openArticle(articleId, article) {
-      let book, author;
-      for (let i = 0; i < this.books.length; i++) {
-        if (this.books[i].articleId === articleId) {
-          book = this.books[i];
-          author = this.authors[i];
-        }
-
-      }
+    openArticle(articleId, bookId) {
       this.$router.push({
         path: '/book/article',
         query: {
-          id: articleId,
-          article: JSON.stringify(article),
-          book: JSON.stringify(book),
-          author: JSON.stringify(author),
+          articleId: articleId,
+          bookId: bookId,
         }
       })
     },
@@ -464,16 +261,7 @@ export default {
       })
     }
   },
-  created() {
 
-  },
-  mounted() {
-    this.init();
-    window.addEventListener('scroll', this.initHeight);
-    this.$nextTick(() => {
-      this.offsetTop = document.querySelector('#boxFixed').offsetTop;
-    })
-  },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },

@@ -16,5 +16,7 @@ import java.util.List;
 public interface AuthorService extends IService<Author> {
 
     List<Author> getAuthors(int[] authorId);
+
+    Author getAuthorById(int authorId);
 }
 

@@ -12,4 +12,5 @@ public interface BookCommentMapper extends BaseMapper<BookComment> {
 
     List<UserComment> selectUserAndCommentList(int bookId);
 
+    List<BookComment> selectByUserId(int userId);
 }

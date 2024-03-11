@@ -1,228 +1,183 @@
 <template>
-  <div style="padding: 5px;">
-    <div v-for="item in data" class="container-block">
+  <div>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="我的评论" name="first">
+        <h3> 我的评论</h3>
+        <my-comment :commentList="commentList"></my-comment>
+      </el-tab-pane>
+      <el-tab-pane label="回复我的" name="second">
+        <h3>回复我的</h3>
+        <my-reviewer :myReviewerList="myReviewerList"></my-reviewer>
+      </el-tab-pane>
+      <el-tab-pane label="评论过的书" name="third">
+        <h3>评论过的书</h3>
+        <reviewed-books :bookList="bookList"></reviewed-books>
+      </el-tab-pane>
+    </el-tabs>
 
-      <div style="text-align: left">
-        <span style="font-size: 20px">{{ item.username }}</span>
-        <span style="float: right">{{ item.data }}</span>
-      </div>
-      <div class="text-color">
-        {{ item.content }}
-      </div>
-      <div style="float: right">——<a href="" style="color: #72aeae">{{ item.groupName }}</a>小组
-      </div>
-    </div>
-
-    <el-empty
-        :image="require('@/assets/空状态.png')"
-        v-if="artData.length === 0"
-        :image-size="250"
-        description="暂未发表任何帖子耶"
-    ></el-empty>
-    <div class="pagination">
-      <el-pagination
-          background
-          layout="total,prev,pager,next"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          :total="artData.length"
-          @current-change="handleCurrentChange">
-      </el-pagination>
-
-    </div>
   </div>
 </template>
 
 <script>
+
+
+import bookDetailApi from "../../../../api/bookDetail";
+import bookApi from "../../../../api/book";
 import userApi from "../../../../api/user"
+import MyComment from "@/components/personalCenter/follow/ArticleItem/MyComment";
+import MyReviewer from "@/components/personalCenter/follow/ArticleItem/MyReviewer";
+import ReviewedBooks from "@/components/personalCenter/follow/ArticleItem/ReviewedBooks";
 
 export default {
+  components: {MyComment, MyReviewer, ReviewedBooks},
   name: "ArticleItem",
   data() {
     return {
-      pageSize: 5,  //分页大小
-      currentPage: 1,   //当前页
-      artData: [
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        }, {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-        {
-          username: '江西网友',
-          data: '1982-06-31',
-          content: '据报道，光头强即将在2月中旬抵达狗熊岭。',
-          groupName: '云淡风轻'
-        },
-
-      ]
-    };
-  },
-  computed: {
-    //计算当前搜索结果表里的数据
-    data() {
-      return this.artData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
+      activeName: 'first',
+      commentList: [],
+      userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+      myReviewerList: [],
+      reviewedBooks: [],
+      bookList: [],
     }
+
   },
-  created() {
-    this.load();
+  mounted() {
+    this.init();
   },
+
+  computed: {},
   methods: {
-    //获取当前页
-    handleCurrentChange(val) {
-      this.currentPage = val;
+    async init() {
+      await this.getCommentList();
+      await this.getMyReviewer();
+      this.getReviewedBooks();
     },
-    async load() {
-      let res = await userApi.getUserArticle(window.sessionStorage.getItem("userInfo"));
-      res = res.data;
-      if (res.success) this.artData = res.data;
+    //获得评论列表
+    async getCommentList() {
+      let commentList = await bookDetailApi.getCommentByUserId(this.userId);
+      commentList = commentList.data;
+      if (commentList.code === 200) {
+        this.commentList = commentList.data;
+      } else {
+        this.commentList = null;
+      }
+      await this.addBookName();
+      await this.addReviewer();
+      await this.addUserName();
+      console.log(commentList.message);
+      console.log(this.commentList);
+    },
+    //在commentList中添加用户名的属性
+    async addUserName() {
+      for (const comment of this.commentList) {
+        let nickname = await userApi.selectNickname(comment.userId);
+        nickname = nickname.data;
+        if (nickname.code === 200) {
+          nickname = nickname.data;
+          this.$set(comment, "nickname", nickname)
+        }
+      }
+    },
+    //在commentList中添加书名的属性
+    async addBookName() {
+      for (const comment of this.commentList) {
+        let bookName = await bookApi.getBookName(comment.bookId);
+        bookName = bookName.data;
+        if (bookName.code === 200) {
+          bookName = bookName.data
+          this.$set(comment, "bookName", bookName)
+        }
+      }
+    },
+    //在commentList中添加回复对象的属性
+    async addReviewer() {
+      for (const comment of this.commentList) {
+        if (comment.commentId !== 0) {
+          let parentComment = await bookDetailApi.getCommentById(comment.commentId);
+          let userId;
+          parentComment = parentComment.data;
+          if (parentComment.code === 200) {
+            parentComment = parentComment.data
+            userId = parentComment.userId;
+            this.$set(comment, "reviewerComment", parentComment.content)
+          }
+          let reviewerName = await userApi.selectNickname(userId);
+          reviewerName = reviewerName.data;
+          if (reviewerName.code === 200) {
+            reviewerName = reviewerName.data
+            this.$set(comment, "reviewerName", reviewerName)
+          }
+        } else {
+          this.$set(comment, "reviewerName", "")
+
+        }
+      }
+    },
+
+    async getMyReviewer() {
+      let reviewerList;
+      this.myReviewerList = this.commentList;
+      for (let comment of this.myReviewerList) {
+        this.$set(comment, "comment", comment);
+        reviewerList = await bookDetailApi.selectCommentByCommentId(comment.id)
+        reviewerList = reviewerList.data;
+        if (reviewerList.code === 200) {
+          reviewerList = reviewerList.data;
+          let nickname;
+          for (let item of reviewerList) {
+            nickname = await userApi.selectNickname(item.userId);
+            nickname = nickname.data
+            if (nickname.code === 200) {
+              nickname = nickname.data;
+              this.$set(item, "nickname", nickname);
+            }
+          }
+
+          this.$set(comment, "reviewerList", reviewerList);
+
+        } else {
+          this.$set(comment, "reviewerList", "");
+        }
+      }
+      console.log("myReviewerList:")
+      console.log(this.myReviewerList)
+    },
+    async getReviewedBooks() {
+      const bookList = [];
+      for (let item of this.commentList) {
+        let book = await bookApi.getBookById(item.bookId);
+        book = book.data;
+        console.log(book.message);
+        if (book.code === 200) {
+
+          bookList.push(book.data);
+        }
+      }
+      // 对bookList去重
+      //排序
+      bookList.sort((a, b) => a.id - b.id);
+      let i = 0, j = 1;
+      const newBookList = [];
+      while (j < bookList.length) {
+        if (bookList[i].id === bookList[j].id) {
+          j++;
+        } else {
+          newBookList.push(bookList[i]);
+          i = j;
+        }
+      }
+      if (j === bookList.length) {
+        newBookList.push(bookList[i]);
+      }
+      this.bookList = newBookList;
+      console.log(this.bookList);
     }
   }
-};
+}
+
 </script>
 <style>
-body {
-  text-align: left;
-}
 
-.container-block {
-  background-color: #f6f6f1;
-  margin: 10px;
-  height: 200px;
-  padding: 10px 20px;
-  border-radius: 6px;
-}
-
-.container-block:hover .inner-block:before,
-.container-block:hover .slider-top-right:after {
-  height: 100%;
-}
-
-.container-block:hover .inner-block:after,
-.container-block:hover .slider-top-right:before {
-  width: 100%;
-}
-
-.slider-top-right:before,
-.inner-block:after {
-  height: 4px;
-  transition: width 0.75s ease;
-  width: 0%;
-}
-
-.slider-top-right:after,
-.inner-block:before {
-  height: 0%;
-  transition: height 0.75s ease;
-  width: 4px;
-}
-
-.inner-block:before,
-.inner-block:after,
-.slider-top-right:before,
-.slider-top-right:after {
-  background-color: #f1ecdc;
-  content: "";
-  display: block;
-  position: absolute;
-}
-
-.inner-block {
-  font-size: 2em;
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.inner-block:before {
-  bottom: 0;
-  left: 0;
-}
-
-.inner-block:after {
-  bottom: 0;
-  right: 0;
-}
-
-.slider-top-right {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.slider-top-right:before {
-  top: 0;
-  left: 0;
-}
-
-.slider-top-right:after {
-  top: 0;
-  right: 0;
-}
-
-.text-color {
-  text-align: left;
-  padding: 10px;
-  height: 100px;
-}
 
 </style>

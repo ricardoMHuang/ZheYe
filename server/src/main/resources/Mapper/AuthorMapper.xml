@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="zheye.server.mapper.AuthorMapper">
 
+    <select id="getAuthorById" resultType="zheye.server.entity.Author">
+        select *
+        from author
+        where id = #{authorId}
+    </select>
 </mapper>

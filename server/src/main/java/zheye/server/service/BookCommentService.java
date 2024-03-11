@@ -5,6 +5,7 @@ import zheye.server.entity.BookComment;
 
 import javax.xml.stream.events.Comment;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * (BookComment)表服务接口
@@ -22,5 +23,9 @@ public interface BookCommentService extends IService<BookComment> {
 
 
     BookComment getCommentById(int id);
+
+    List<BookComment> getCommentByUserId(int userId);
+
+    List<BookComment> selectCommentByCommentId(int commentId);
 }
 

@@ -32,12 +32,33 @@ public class BookController {
         List<Book> books = bookService.getBooks();
         return Result.ok(books).message("获取书籍成功");
     }
-  /*  @PostMapping("/bookByType")
-    public Result bookByType() {
-        List<Book> books=bookService.getBooksByType();
-        return Result.ok(books).message("获取书籍成功");
-    }*/
 
+    /*  @PostMapping("/bookByType")
+      public Result bookByType() {
+          List<Book> books=bookService.getBooksByType();
+          return Result.ok(books).message("获取书籍成功");
+      }*/
+    @PostMapping("/getBookById")
+    public Result getBookById(@RequestBody int bookId) {
+        Book book = bookService.getBookById(bookId);
+        if (book != null) {
+
+            return Result.ok(book).message("获取书籍成功");
+        } else {
+            return Result.error().message("获取书籍失败");
+        }
+    }
+
+    @PostMapping("/getBookName")
+    public Result getBookName(@RequestBody int bookId) {
+        String bookName = bookService.getBookName(bookId);
+        if (bookName != null) {
+
+            return Result.ok(bookName).message("获取书籍名称成功");
+        } else {
+            return Result.error().message("获取书籍名称失败");
+        }
+    }
 
 }
 

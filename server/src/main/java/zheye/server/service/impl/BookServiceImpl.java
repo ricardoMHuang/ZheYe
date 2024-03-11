@@ -26,4 +26,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         return baseMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public String getBookName(int bookId) {
+        return baseMapper.selectBookName(bookId);
+    }
+
+    @Override
+    public Book getBookById(int bookId) {
+        return baseMapper.getBookById(bookId);
+    }
+
 }

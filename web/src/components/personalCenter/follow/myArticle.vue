@@ -1,5 +1,5 @@
 <template>
-  <div class="myart1">
+  <div>
     <article-item/>
   </div>
 </template>
@@ -14,7 +14,6 @@ export default {
   name: "MyArticle",
   data() {
     return {
-      allData: [],
 
     };
   },
@@ -24,22 +23,10 @@ export default {
   },
   methods: {
 
-    async load() {
-      await myArticle(this.$route.params.id)
-          .then((res) => {
-            console.log(res);
-            this.allData = res.data
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    },
   },
 };
 </script>
 
 <style>
-.myart1 {
-  line-height: 30px;
-}
+
 </style>

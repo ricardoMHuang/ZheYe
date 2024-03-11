@@ -32,5 +32,15 @@ public class AuthorController {
         return Result.ok(authors).message("获取收藏夹成功");
     }
 
+    @PostMapping("/getAuthorById")
+    public Result getAuthorById(@RequestBody int authorId) {
+        Author author = authorService.getAuthorById(authorId);
+        if (author != null) {
+            return Result.ok(author).message("获取作者成功");
+        } else {
+            return Result.error().message("获取作者失败");
+        }
+    }
+
 }
 

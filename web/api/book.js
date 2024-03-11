@@ -12,5 +12,12 @@ export default {
     },
     async delete(params) {
         return await http.post("frontApi/book/delete", params);
+    },
+    getBookName(bookId) {
+        return http.post("frontApi/book/getBookName", bookId);
+
+    },
+    getBookById(bookId) {
+        return http.post("frontApi/book/getBookById", bookId);
     }
 }

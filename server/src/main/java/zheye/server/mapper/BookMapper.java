@@ -16,4 +16,7 @@ import zheye.server.entity.Book;
  */
 public interface BookMapper extends BaseMapper<Book> {
 
+    String selectBookName(int bookId);
+
+    Book getBookById(int bookId);
 }
