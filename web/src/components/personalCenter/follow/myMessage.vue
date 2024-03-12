@@ -11,11 +11,9 @@ import ArticleItem from "@/components/personalCenter/follow/ArticleItem";
 
 export default {
   components: {ArticleItem},
-  name: "MyArticle",
+  name: "MyMessage",
   data() {
-    return {
-
-    };
+    return {};
   },
 
   mounted() {

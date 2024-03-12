@@ -4,7 +4,7 @@ import Main from "@/components/index/Main";
 import Book from "@/components/book/Book";
 import PersonalCenter from "@/components/personalCenter/PersonalCenter";
 import Info from "@/components/personalCenter/follow/Info";
-import myArticle from "@/components/personalCenter/follow/myArticle";
+import myArticle from "@/components/personalCenter/follow/myMessage";
 import myCollect from "@/components/personalCenter/follow/myCollect";
 import bookDetail from "@/components/book/bookDetail";
 import category from "@/components/book/category";
@@ -17,6 +17,7 @@ import GroupFind from "@/components/group/GroupAll";
 import GroupAll from "@/components/group/GroupAll";
 import GroupPost from "@/components/group/MyGroup";
 import BookConnect from "@/components/book/bookContent/bookContent";
+import Editor from "@/components/personalCenter/Editor";
 
 Vue.use(VueRouter)
 
@@ -41,7 +42,6 @@ const routes = [
             {path: '/group/group_all', component: Group_All},
             {path: '/group/GroupFind', component: GroupFind},
             {path: '/group/GroupPost', component: GroupPost},
-
         ],
     },
     {
@@ -58,6 +58,7 @@ const routes = [
             {path: '/personCenter/myCollect', component: myCollect},
         ]
     },
+    {path: '/editor', component: Editor,},
 
 
     /*{

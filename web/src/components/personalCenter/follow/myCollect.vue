@@ -21,7 +21,7 @@
         :image="require('@/assets/空状态.png')"
         v-if="allData.length === 0"
         :image-size="250"
-        description="暂未发表任何帖子耶"
+        description="暂未收藏任何书籍耶  "
     ></el-empty>
     <div class="pagination">
       <el-pagination

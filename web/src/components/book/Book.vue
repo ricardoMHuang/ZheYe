@@ -1,52 +1,56 @@
 <template>
   <div>
-    <!--    轮播图-->
-    <div>
-      <el-carousel :interval="5000" arrow="always" type="card">
-        <el-carousel-item v-for="item in imgInfo" :key="item.id">
-          <img style="object-fit: scale-down; width: 100%;height: 100%;" :src="item.idviews"/>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
+    <div class="bookMain-background"></div>
+    <div class="bookMain">
 
-    <div style="margin: auto;width: 100%">
-
-
-      <h2>每周精品</h2>
-      <every-week :mostConcernBookList="mostConcernBookList"></every-week>
-
-      <h2>读者推文</h2>
-      <reader-article :articleList="articleList"></reader-article>
-
-      <!--    分割线-->
-      <el-divider></el-divider>
-
-
-      <div style="margin-bottom: 30px">
-        <h2>分类</h2>
-        <classify :bookTypeList="bookTypeList"></classify>
-
-      </div>
-
-      <!--        分割线-->
-      <el-divider><i class="el-icon-notebook-2"></i></el-divider>
-
-
-      <h2>精选书评</h2>
-      <book-comment :reviewList="reviewList"></book-comment>
-
-
-      <h2>热门标签</h2>
+      <!--    轮播图-->
       <div>
-        <el-row>
-          <el-col v-for="(o,index) in typeList" :key="o" :span="3" :offset="1 " style="padding-bottom: 10px">
-            <el-button size="mini" plain @click="openCategory">{{ o.type }}</el-button>
-          </el-col>
-        </el-row>
+        <el-carousel :interval="5000" arrow="always" type="card">
+          <el-carousel-item v-for="item in imgInfo" :key="item.id">
+            <img style="object-fit: scale-down; width: 100%;height: 100%;" :src="item.idviews"/>
+          </el-carousel-item>
+        </el-carousel>
       </div>
 
-      <h2>排行</h2>
-      <rank :sellingList="sellingList"></rank>
+      <div style="margin: auto;width: 100%">
+
+
+        <h2>每周精品</h2>
+        <every-week :mostConcernBookList="mostConcernBookList"></every-week>
+
+        <h2>读者推文</h2>
+        <reader-article :articleList="articleList"></reader-article>
+
+        <!--    分割线-->
+        <el-divider></el-divider>
+
+
+        <div style="margin-bottom: 30px">
+          <h2>分类</h2>
+          <classify :bookTypeList="bookTypeList"></classify>
+
+        </div>
+
+        <!--        分割线-->
+        <el-divider><i class="el-icon-notebook-2"></i></el-divider>
+
+
+        <h2>精选书评</h2>
+        <book-comment :reviewList="reviewList"></book-comment>
+
+
+        <h2>热门标签</h2>
+        <div>
+          <el-row>
+            <el-col v-for="(o,index) in typeList" :key="o" :span="3" :offset="1 " style="padding-bottom: 10px">
+              <el-button size="mini" plain @click="openCategory">{{ o.type }}</el-button>
+            </el-col>
+          </el-row>
+        </div>
+
+        <h2>排行</h2>
+        <rank :sellingList="sellingList"></rank>
+      </div>
     </div>
   </div>
 </template>
@@ -310,5 +314,10 @@ export default {
 
 h2 {
   margin-top: 60px;
+}
+
+.bookMain {
+  padding: 0 20px;
+  background-color: white;
 }
 </style>

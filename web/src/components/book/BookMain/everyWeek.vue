@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-row style="margin-bottom: 80px;">
+    <el-row>
       <el-col v-for="(item,index) in mostConcernBookList" :span="8" :offset="index%2 > 0 ? 3 : 0"
               style="margin: 15px 0;">
-        <el-card :body-style="{padding: 0}" style="width: 120px;height:170px; float: left;">
+        <el-card :body-style="{padding: 0}" class="card">
           <img :src="item.image" class="image" @click="openBook(item.id)">
         </el-card>
         <div style="float: left; padding: 10px; margin-left: 10px;">
@@ -39,5 +39,17 @@ export default {
   width: 100%;
   display: block;
   cursor: pointer;
+}
+
+.card {
+  width: 120px;
+  height: 170px;
+  float: left;
+  transition: 0.5s;
+
+}
+
+.card:hover {
+  transform: scale(1.2);
 }
 </style>

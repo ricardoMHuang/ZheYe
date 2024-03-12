@@ -1,6 +1,5 @@
 <template>
-  <div style="width: 80%;margin: auto">
-
+  <div style="width: 1200px;margin: auto">
     <!--    弹出框-->
     <div>
       <el-dialog :visible.sync="dialogVisible" :title="title">
@@ -23,82 +22,54 @@
     <el-page-header @back="goBack" :content="book.name" style="padding: 20px"></el-page-header>
 
     <!--          书本的基本内容和评分-->
-    <div class="bookDetail">
-      <h2 style="text-align: center;margin-top: 0;padding-top: 50px;">{{ book.name }}</h2>
-      <div style="text-align: center">
-        <el-avatar size="large" :src="author.image"></el-avatar>
-        <h5 style="margin: 0">{{ author.name }}</h5>
-        <h5>{{ book.publish }}</h5>
-        <h5>{{ book.page }}页</h5>
-        <div style="height: 50px">
-          <el-button type="success" @click="openBook()">阅读</el-button>
-          <el-button type="primary" @click="addBookCollect()" v-show="!state">加入书架</el-button>
-          <el-button type="success" @click="deleteBookCollect()" v-show="state">已加入</el-button>
-        </div>
-        <el-tag size="mini">爱情</el-tag>&nbsp;
-        <el-tag size="mini">科幻</el-tag>
-      </div>
-      <!--    评分-->
-      <div style="margin: auto; padding: 10px;">
-        <el-rate v-model="value"
-                 disabled
-                 show-score
-                 text-color="#ff9900"
-                 score-template="{value}" style="text-align: center">
-        </el-rate>
-      </div>
-    </div>
+    <book-information :book="book" :state="state" :author="author" :value="value"></book-information>
 
-    <!--    <el-divider></el-divider>&lt;!&ndash; 分割线&ndash;&gt;-->
-
-    <!--图书状态和评价-->
-    <div style="text-align:center;">
-      <el-button @click="open(1)">想读</el-button>
-      <el-button @click="open(2)">在读</el-button>
-      <el-button @click="open(3)">读过</el-button>
-    </div>
     <!--      内容简介-->
-    <div>
-      <h2 style="background-color: #fcfbf9;">内容简介</h2>
+    <h2 class="title">内容简介</h2>
+    <el-card>
       <p style="width: 90%;margin: auto;line-height: 3ch">{{ book.briefIntroduction }}</p>
-    </div>
+    </el-card>
     <!--      作者简介-->
     <div>
-      <h2 style="background-color: #fcfbf9">作者简介</h2>
-      <p style="width: 90%;margin: auto;line-height: 3ch">
-        &nbsp;&nbsp;{{ author.briefIntroduction }}
-      </p>
+      <h2 class="title">作者简介</h2>
+      <el-card>
+        <p style="width: 90%;margin: auto;line-height: 3ch">
+          &nbsp;&nbsp;{{ author.briefIntroduction }}
+        </p>
+      </el-card>
+
     </div>
     <!--      目录-->
     <div>
-      <h2 style="background-color: #fcfbf9">目录</h2>
-      <el-collapse v-model="activeName" accordion style="width: 100%;margin: auto">
-        <el-collapse-item :title="'第一章：'+directory.chapter1" name="1">
-          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-        </el-collapse-item>
-        <el-collapse-item :title="'第二章：'+directory.chapter2" name="2">
-          <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-        </el-collapse-item>
-        <el-collapse-item :title="'第三章：'+directory.chapter3" name="3">
-          <div>简化流程：设计简洁直观的操作流程；</div>
-        </el-collapse-item>
-        <el-collapse-item :title="'第四章：'+directory.chapter4" name="4">
-          <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-        </el-collapse-item>
-        <el-collapse-item :title="'第五章：'+directory.chapter5" name="5">
-          <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-        </el-collapse-item>
-        <el-collapse-item :title="'第六章：'+directory.chapter6" name="6">
-          <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-        </el-collapse-item>
-      </el-collapse>
+      <h2 class="title">目录</h2>
+      <el-card>
+        <el-collapse v-model="activeName" accordion>
+          <el-collapse-item :title="'第一章：'+directory.chapter1" name="1">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+          <el-collapse-item :title="'第二章：'+directory.chapter2" name="2">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+          <el-collapse-item :title="'第三章：'+directory.chapter3" name="3">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+          <el-collapse-item :title="'第四章：'+directory.chapter4" name="4">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+          <el-collapse-item :title="'第五章：'+directory.chapter5" name="5">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+          <el-collapse-item :title="'第六章：'+directory.chapter6" name="6">
+            <div>{{ directory.content }}</div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-card>
+
     </div>
-
-    <h2 style="background-color:  #fcfbf9">&nbsp;</h2>
-
     <!--      读者推文-->
-    <div style="position:relative; margin-top: 100px">
-      <h3>读者推文</h3>
+
+    <h3 class="title">读者推文</h3>
+    <el-card style="position:relative;">
       <!--    头像-->
       <div style="margin-top: 40px">
         <el-avatar size="large" :src="article.userImage"></el-avatar>
@@ -112,56 +83,11 @@
       <p style="line-height: 3ch;" class="textOverflow">
         &nbsp;&nbsp;{{ article.content }}
       </p>
-      <el-button style="position:relative; left: 850px" plain @click="openArticle()">查看推文</el-button>
-    </div>
+      <el-button style="position:relative; left: 1000px" plain @click="openArticle()">查看推文</el-button>
+    </el-card>
     <!--      评论-->
-    <h3>评论</h3>
-    <div v-for="(comment,index) in commentList " style="position:relative;">
-
-      <div style="margin-top: 40px">
-        <el-avatar size="large" :src="comment.avatar"></el-avatar>
-        <div style="display: inline-block;padding: 10px">
-          <div>{{ comment.nickname }}</div>
-          <div style="color: #999999"> {{ comment.publishTime }} 回复</div>
-        </div>
-      </div>
-
-      <div style="display: flex;flex-wrap: wrap">
-        <p style="margin: 0 50px;width: 65%; ">
-          {{ comment.content }}
-        </p>
-        <el-link :underline="false" @click="support(comment)" class="el_link">{{ comment.supportNum }} <i
-            class="el-icon-thumb" :style="{color:comment.supportColor }"></i></el-link>
-        <el-link :underline="false" class="el_link" @click="showInput(comment)">回复</el-link>
-        <!--        子评论组件-->
-        <div v-for="(childComment,index) in comment.childCommentList" class="childComment"
-             v-if="!comment.showChildComment">
-          <div style="margin-top: 40px">
-            <el-avatar size="large" :src="childComment.avatar"></el-avatar>
-            <div style="display: inline-block;padding: 10px">
-              <div>{{ childComment.nickname }}</div>
-              <div style="color: #999999"> {{ childComment.publishTime }} 回复 {{ childComment.reviewerName }}</div>
-            </div>
-          </div>
-          <div style="display: flex">
-            <p style="margin: 0 50px;width: 65%; ">
-              {{ childComment.content }}
-            </p>
-            <el-link :underline="false" class="el_link" @click="support(childComment)">{{ childComment.supportNum }} <i
-                class="el-icon-thumb" :style="{color:childComment.supportColor }"></i></el-link>
-            <el-link :underline="false" class="el_link" @click="showInput(childComment)">回复</el-link>
-          </div>
-          <el-divider></el-divider>
-        </div>
-
-        <el-link class="el_link" v-if="comment.childCommentList.length"
-                 @click="comment.showChildComment = !comment.showChildComment;"
-                 :underline="false">更多 <i class="el-icon-arrow-down"></i></el-link>
-      </div>
-
-      <el-divider></el-divider>
-
-    </div>
+    <h3 class="title">评论</h3>
+    <comment-detail :commentList="commentList"></comment-detail>
     <!--    回复评论框-->
     <el-drawer
         :title="reviewerTitle"
@@ -193,9 +119,12 @@ import userApi from "../../../api/user";
 import bookCollectApi from "../../../api/bookCollect";
 import bookApi from "../../../api/book"
 import authorApi from "../../../api/author"
+import BookInformation from "@/components/book/BookDetail/BookInformation";
+import CommentDetail from "@/components/book/BookDetail/CommentDetail";
 
 export default {
   name: "newBook",
+  components: {BookInformation, CommentDetail},
   data() {
     let validateRate = (rule, value, callback) => {
       if (!value) {
@@ -617,11 +546,7 @@ export default {
   width: 70%;
 }
 
-.bookDetail {
-  background-image: linear-gradient(to top, rgba(241, 238, 220, 0), rgb(241, 238, 220
-  ));
 
-}
 
 .textOverflow {
   -webkit-line-clamp: 3;
@@ -631,15 +556,9 @@ export default {
   text-overflow: ellipsis;
 }
 
-.el_link {
-  height: 40px;
-  width: 8%;
-}
-
-.childComment {
-  background-color: #f9f8f4;
-  border-radius: 5px;
-  width: 100%;
-  padding: 0 0 0 100px;
+.title {
+  color: white;
+  padding: 10px;
+  margin: 0px;
 }
 </style>

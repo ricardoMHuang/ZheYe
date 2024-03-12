@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 70%;margin: auto">
+  <div style="margin: auto;padding: 100px; background-color: white">
     <el-page-header @back="goBack" content="读者推文" style="padding: 20px"></el-page-header>
     <h2>读者推文</h2>
     <el-card :body-style="{padding:0}" style="padding: 10px;position: relative">
@@ -10,6 +10,7 @@
         <div style="color: #999999"> {{ author.name }}</div>
       </div>
       <div style="display: inline-block;position:absolute;right: 15px;top: 17px">
+        <el-button type="primary" @click="openBook()">阅读</el-button>
         <el-button type="primary" @click="addBookCollect()" v-show="!state">加入书架</el-button>
         <el-button type="success" @click="deleteBookCollect()" v-show="state">已加入</el-button>
       </div>
@@ -174,6 +175,14 @@ export default {
         message: '已加入书架',
         type: 'success'
       });
+    },
+    openBook() {
+      this.$router.push({
+        path: '/bookContent',
+        query: {
+          bookId: this.bookId,
+        }
+      })
     },
     //返回上一级
     goBack() {

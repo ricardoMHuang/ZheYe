@@ -3,7 +3,8 @@
     <el-page-header @back="goBack" :content="this.book.name" style="padding: 20px ">
     </el-page-header>
     <el-divider></el-divider>
-    <el-empty v-if="emptyBookContent" description="该书还未上架！"></el-empty>
+
+    <el-empty v-if="!emptyBookContent" description="该书还未上架！"></el-empty>
     <div v-else>
       <!--功能区-->
       <div id="container">
@@ -43,7 +44,7 @@
                    style="margin: 10px;" id="openLight"></el-button>
       </div>
 
-      <div>
+      <div v-if="chapterContentSplit!=null">
         <!--章节内容-->
         <el-skeleton style="margin: 20px" :loading="loading" animated>
         </el-skeleton>
@@ -86,7 +87,7 @@ export default {
       fontColor: 'black',
       directory: [],
       emptyBookContent: true,
-      bookContent: {},//整本书
+      bookContent: "",//整本书
       bookChapters: {},//所有章节名
       loading: true,//骨架框
       chapterContent: "",//对应章节内容
@@ -117,8 +118,8 @@ export default {
       await this.getBookChapter(this.book.id);
       await setTimeout(() => {
         this.getBookContent(this.book.id)
-      }, 200);
-      this.isEmptyContent();
+        console.log(this.bookContent)
+      }, 500);
     },
     //获取书的基本信息
     async getBook() {
@@ -132,11 +133,18 @@ export default {
     //获取整本书
     async getBookContent(bookId) {
       let res = await directoryApi.getBookContent(bookId);
-      this.bookContent = res.data.data;
       // this.splitSegment(this.bookContent["chapter1Content"])
-      this.chapterContent = this.bookContent["chapter1Content"];
-      this.splitChapter(this.chapterContent);
-      this.chapter = this.bookContent["chapter1"];
+      if (res.data.data != null) {
+        this.bookContent = res.data.data;
+        this.chapterContent = this.bookContent["chapter1Content"];
+        this.splitChapter(this.chapterContent);
+        this.chapter = this.bookContent["chapter1"];
+        this.emptyBookContent = true;
+      } else {
+        this.emptyBookContent = false;
+        this.bookContent = "";
+      }
+      console.log(this.bookContent)
       this.loading = false
     },
     //获取所有章节名
@@ -212,11 +220,6 @@ export default {
         this.bgColor = 'white';
         this.fontColor = 'black';
       }
-    }
-    ,
-    isEmptyContent() {
-      console.log(this.bookContent);
-      this.emptyBookContent = this.bookContent === null;
     }
     ,
     moveButton() {

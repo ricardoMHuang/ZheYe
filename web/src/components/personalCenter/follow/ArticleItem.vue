@@ -13,6 +13,10 @@
         <h3>评论过的书</h3>
         <reviewed-books :bookList="bookList"></reviewed-books>
       </el-tab-pane>
+      <el-tab-pane label="文章" name="four">
+        <h3>文章</h3>
+        <my-article :articleList="articleList"></my-article>
+      </el-tab-pane>
     </el-tabs>
 
   </div>
@@ -27,15 +31,18 @@ import userApi from "../../../../api/user"
 import MyComment from "@/components/personalCenter/follow/ArticleItem/MyComment";
 import MyReviewer from "@/components/personalCenter/follow/ArticleItem/MyReviewer";
 import ReviewedBooks from "@/components/personalCenter/follow/ArticleItem/ReviewedBooks";
+import articleApi from "../../../../api/article";
+import MyArticle from "@/components/personalCenter/follow/ArticleItem/MyArticle";
 
 export default {
-  components: {MyComment, MyReviewer, ReviewedBooks},
+  components: {MyComment, MyReviewer, ReviewedBooks, MyArticle},
   name: "ArticleItem",
   data() {
     return {
-      activeName: 'first',
-      commentList: [],
       userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+      activeName: 'first',
+      articleList: [],
+      commentList: [],
       myReviewerList: [],
       reviewedBooks: [],
       bookList: [],
@@ -48,10 +55,12 @@ export default {
 
   computed: {},
   methods: {
+    //初始化
     async init() {
       await this.getCommentList();
       await this.getMyReviewer();
-      this.getReviewedBooks();
+      await this.getReviewedBooks();
+      await this.getArticleList();
     },
     //获得评论列表
     async getCommentList() {
@@ -114,7 +123,7 @@ export default {
         }
       }
     },
-
+    //获得回复的评论
     async getMyReviewer() {
       let reviewerList;
       this.myReviewerList = this.commentList;
@@ -143,6 +152,7 @@ export default {
       console.log("myReviewerList:")
       console.log(this.myReviewerList)
     },
+    //获得我评论过的书
     async getReviewedBooks() {
       const bookList = [];
       for (let item of this.commentList) {
@@ -171,7 +181,16 @@ export default {
         newBookList.push(bookList[i]);
       }
       this.bookList = newBookList;
+      console.log("评论过的书：");
       console.log(this.bookList);
+    },
+    //获取我的文章
+    async getArticleList() {
+      let articleList = await articleApi.getArticleByUserId(this.userId);
+      articleList = articleList.data;
+      this.articleList = articleList.data;
+      console.log(articleList.message);
+      console.log(this.articleList)
     }
   }
 }

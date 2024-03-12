@@ -16,5 +16,7 @@ public interface ArticleService extends IService<Article> {
     public List<Article> getArticleItem();
 
     Article getArticleInt(int id);
+
+    List<Article> getArticleByUserId(int userId);
 }
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import zheye.server.utils.Result;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Article)表控制层
@@ -33,6 +34,16 @@ public class ArticleController {
         Article article = articleService.getArticleInt(id);
         if (article != null) {
             return Result.ok(article).message("获取推文成功");
+        } else {
+            return Result.error().message("获取推文失败");
+        }
+    }
+
+    @PostMapping("/getArticleByUserId")
+    public Result getArticleByUserId(@RequestBody int userId) {
+        List<Article> articles = articleService.getArticleByUserId(userId);
+        if (articles != null) {
+            return Result.ok(articles).message("获取推文成功");
         } else {
             return Result.error().message("获取推文失败");
         }

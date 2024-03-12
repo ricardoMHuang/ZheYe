@@ -1,28 +1,15 @@
 <template>
-  <div style="text-align: center;">
-
-    <el-header height="200px;" style="padding: 0px;height: 200px;">
-      <el-image :src="require('@/assets/背景墙.jpg')"></el-image>
-      <el-avatar shape="square" :size="100" :src="image1"
-                 style="position:relative;float: bottom;right: 400px;bottom:50px;z-index: 10"></el-avatar>
-      <h1 class="text">{{ nickname }}</h1>
-      <el-button icon="el-icon-arrow-left" @click="returnPage"
-                 style="position:relative;float: top;right:545px;bottom:380px;z-index: 10;width: 100px;border: none;background-color: rgba(4,94,239,0);font-size: 16px;">
-        返回首页
-      </el-button>
-    </el-header>
-
-    <el-container>
-      <el-header style="width: 1200px">
-        <div class="person_body_left">
-          <el-card class="box-card" :body-style="{ padding: '0px' }">
-
+    <div style="text-align: center;">
+      <el-container>
+        <el-header>
+          <el-page-header @back="returnPage" content="个人中心">
+          </el-page-header>
+          <el-card :body-style="{ padding: '0px' }" style="display: flex;justify-content: center">
             <el-menu
                 router
                 active-text-color="#00c3ff"
                 mode="horizontal"
                 default-active="autoIndex"
-                style="width: 1200px"
             >
               <el-menu-item
                   index="/personCenter/info">
@@ -30,26 +17,23 @@
                 <span slot="title">个人简介</span>
               </el-menu-item>
               <el-menu-item
-                  index="/personCenter/myarticle"
+                  index="/personCenter/myArticle"
               >
                 <i class="el-icon-edit-outline"></i>
                 <span slot="title">发帖</span>
               </el-menu-item>
               <el-menu-item
-                  index="/personCenter/mycollect"
+                  index="/personCenter/myCollect"
               >
                 <i class="el-icon-document"></i>
                 <span slot="title">我的书架</span>
               </el-menu-item>
             </el-menu>
           </el-card>
-        </div>
       </el-header>
-      <el-main>
-        <div class="person_body_right">
+        <el-main style="position:relative;top:100px;width: 1200px;margin: auto">
           <router-view></router-view>
-        </div>
-      </el-main>
+        </el-main>
     </el-container>
   </div>
 </template>
@@ -61,7 +45,8 @@ export default {
   data() {
     return {
       nickname: '',
-      image1: ''
+      image1: '',
+      autoIndex: '/personCenter/info',
     }
   },
   methods: {
@@ -84,10 +69,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  font-family: 方正粗黑宋简体 sans-serif;
-  width: 1200px;
-}
 
 .el-aside {
   background-color: #D3DCE6;
@@ -102,15 +83,7 @@ body {
   text-align: center;
 }
 
-.person_body_left {
 
-
-  margin-right: 3%;
-  text-align: center;
-  width: 1200px;
-  right: 20px;
-  position: relative;
-}
 
 .el-menu-item {
   float: right;

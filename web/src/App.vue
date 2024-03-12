@@ -6,14 +6,20 @@
 </template>
 
 <style>
+body {
+  background-image: url("assets/photo2.webp");
+  background-size: cover;
+  background-attachment: fixed;
+}
 
 #app {
+  position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   /*text-align: center;*/
-  color: #2c3e50;
   font-family: serif;
+  background-color: rgba(255, 255, 255, 0.1);
+
 }
 
 nav {
@@ -31,7 +37,7 @@ nav a.router-link-exact-active {
 
 body {
   margin: auto;
-  width: 1200px;
+  /*width: 1200px;*/
   /*background-color: #42b983;*/
 }
 

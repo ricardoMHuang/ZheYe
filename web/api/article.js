@@ -7,4 +7,8 @@ export default {
     async getArticleInt(params) {
         return await http.post("frontApi/article/articlePlease", params);
     },
+    getArticleByUserId(userId) {
+        return http.post("frontApi/article/getArticleByUserId", userId);
+
+    }
 }

@@ -32,5 +32,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 //        System.out.println(baseMapper.selectOne(queryWrapper));
         return baseMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public List<Article> getArticleByUserId(int userId) {
+        return baseMapper.selectByUserId(userId);
+    }
 }
 
