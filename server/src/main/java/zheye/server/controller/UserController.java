@@ -61,6 +61,15 @@ public class UserController {
         return Result.ok().message("用户更新成功");
     }
 
+    @PostMapping("/getUserInfo")
+    public Result getUserInfo(@RequestBody long userId) {
+        User user = userService.getUserInfo(userId);
+        if (user != null)
+            return Result.ok(user).message("获取用户信息成功");
+        else
+            return Result.error().message("获取用户信息失败");
+    }
+
     @PostMapping("/selectNickname")
     public Result selectNickname(@RequestBody int id) {
         if (userService.selectNickname(id) != null)
@@ -69,4 +78,5 @@ public class UserController {
             return Result.error().message("该用户不存在");
         }
     }
+
 }

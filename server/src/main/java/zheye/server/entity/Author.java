@@ -25,7 +25,7 @@ public class Author implements Serializable {
 
     private String country;
 
-    private String birthday;
+    private String birthtime;
 
     private String deathTime;
 

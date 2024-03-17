@@ -6,8 +6,11 @@
       <div class="bookDetail">
         <h2 style="text-align: center;margin-top: 0;padding-top: 50px;">{{ book.name }}</h2>
         <div style="text-align: center">
-          <el-avatar size="large" :src="author.image"></el-avatar>
-          <h5 style="margin: 0">{{ author.name }}</h5>
+          <div @click="openAuthor()" class="author-avatar">
+            <el-avatar size="large" :src="author.image"></el-avatar>
+            <h5 style="margin: 0">{{ author.name }}</h5>
+          </div>
+
           <h5>{{ book.publish }}</h5>
           <h5>{{ book.page }}页</h5>
           <div style="height: 50px">
@@ -36,6 +39,17 @@
       </div>
 
     </div>
+    <el-dialog
+        title="作者信息"
+        :visible.sync="authorShow"
+        width="30%">
+      <div>
+        <el-avatar :src="author.image" alt="作者头像"></el-avatar>
+        {{ this.author.name }} {{ this.author.sex }}<br>
+        {{ this.author.country }} {{ this.author.birthtime }}-{{ this.author.deathTime }}<br>
+        <p>{{ this.author.briefIntroduction }}</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,6 +57,11 @@
 export default {
   name: "BookInformation",
   props: ["book", "state", "author", "value"],
+  data() {
+    return {
+      authorShow: false,
+    }
+  },
   methods: {
     openBook() {
       this.$parent.openBook();
@@ -56,9 +75,10 @@ export default {
     open(buttonNumber) {
       this.$parent.open(buttonNumber);
     },
-    mounted() {
-
-    },
+    openAuthor() {
+      this.authorShow = !this.authorShow;
+      console.log("打开作者信息弹框")
+    }
 
   }
 }
@@ -107,6 +127,15 @@ export default {
 
   transform: scale(1.05);
 
+}
+
+.author-avatar {
+  cursor: pointer;
+  transition: 1s;
+}
+
+.author-avatar:hover {
+  transform: scale(1.2);
 }
 
 

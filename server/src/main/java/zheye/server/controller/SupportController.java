@@ -1,5 +1,6 @@
 package zheye.server.controller;
 
+import org.apache.ibatis.annotations.Update;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class SupportController {
 
     @PostMapping("/insertSupport")
     public Result insertSupport(@RequestBody Support support) {
+
         if (supportService.select(support) == null) {
             return Result.ok(supportService.insertSupport(support)).message("点赞成功");
         } else {

@@ -9,15 +9,16 @@ import myCollect from "@/components/personalCenter/follow/myCollect";
 import bookDetail from "@/components/book/bookDetail";
 import category from "@/components/book/category";
 import ex from "@/components/book/ex";
-import Group_All from "@/components/group/GroupPost";
 import article from "@/components/book/article";
 import Login from "@/components/Login";
-import GroupDetail from "@/components/group/GroupDetail";
-import GroupFind from "@/components/group/GroupAll";
-import GroupAll from "@/components/group/GroupAll";
-import GroupPost from "@/components/group/MyGroup";
+import GroupFind from "@/components/group/Group";
+import GroupPost from "@/components/group/GroupPost";
 import BookConnect from "@/components/book/bookContent/bookContent";
-import Editor from "@/components/personalCenter/Editor";
+import GroupEditor from "@/components/group/GroupEditor"
+import MyGroups from "@/components/group/MyGroups";
+import Group from "@/components/group/Group";
+import GroupDetail from "@/components/group/GroupDetail";
+import ArticleEditor from "@/components/personalCenter/ArticleEditor";
 
 Vue.use(VueRouter)
 
@@ -37,11 +38,12 @@ const routes = [
             {path: "/book/category", component: category,},
             {path: "/book/ex", component: ex,},
             {path: '/book/article', component: article},
-            {path: '/group', component: GroupAll},
-            {path: '/group/GroupDetail', component: GroupDetail},
-            {path: '/group/group_all', component: Group_All},
+            {path: '/group', component: Group},
+            {path: '/group/myGroups', component: MyGroups},
+            {path: '/group/groupDetail', component: GroupDetail},
             {path: '/group/GroupFind', component: GroupFind},
             {path: '/group/GroupPost', component: GroupPost},
+            {path: '/group/groupEditor', component: GroupEditor},
         ],
     },
     {
@@ -58,7 +60,7 @@ const routes = [
             {path: '/personCenter/myCollect', component: myCollect},
         ]
     },
-    {path: '/editor', component: Editor,},
+    {path: '/articleEditor', component: ArticleEditor,},
 
 
     /*{

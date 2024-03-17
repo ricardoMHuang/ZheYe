@@ -1,141 +1,160 @@
 <template>
-  <div style="width: 95%;margin-left: 2%;margin-right: 2%">
-    <!--      左侧-->
-    <div style="float: left;width: 65%;display: inline-block;padding-left: 4%">
-      <el-page-header @back="goBack" content="小组详情" style="margin: 30px 0"></el-page-header>
-
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1" @click="no=1">热门帖子</el-menu-item>
-        <el-menu-item index="2" @click="no=2">我关注的</el-menu-item>
-        <el-menu-item index="3" @click="no=3">我回复的</el-menu-item>
-        <el-menu-item index="4" @click="no=4">我发布的</el-menu-item>
-      </el-menu>
-      <div style="">
-        <el-row v-show="no===1" style="" v-for="(item,i) in classes" :key="1">
-          <el-col v-for="(type,j) in item.detail" :span="24" :key="2" style="margin-bottom: 30px">
-            <el-card
-                style="">
-              <div>
-                <el-card :body-style="{ padding: '0px'} " style="width: 85px;display: inline-block;float:left;">
-                  <img :src="type.url" class="image" :key="3"
-                       style="display: inline-block;width: 85px;height:85px;float: left">
-                </el-card>
-                <div style="padding: 10px; margin-bottom: 10px; display: inline-block;float: left">
-                  <div style="font-size: 20px">{{ type.groupName }}</div>
-                  <div style="font-size: 20px">最近更新：{{ type.title }}</div>
-                  <div style="font-size: 15px">{{ type.counts }}成员</div>
-                </div>
-              </div>
-
-            </el-card>
-          </el-col>
-
-
-        </el-row>
-
-        <el-row v-show="no===2">
-          <el-card>我关注的</el-card>
-        </el-row>
-        <el-row v-show="no===3">
-          <el-card>我回复的</el-card>
-        </el-row>
-        <el-row v-show="no===4">
-          <el-card>我发布的</el-card>
-        </el-row>
+  <div style="margin: auto;width: 1000px">
+    <el-page-header @back="goBack" content="帖子" style="padding: 20px"></el-page-header>
+    <el-card :body-style="{padding:0}" style="padding: 10px;position: relative">
+      <el-image :src="group.image" :lazy="true" class="group-image" @click="openGroup">
+      </el-image>
+      <div style="display: inline-block; position: relative; left: 10px;bottom:10px">
+        <div>{{ this.group.name }}</div>
+        <div style="color: #999999"> {{ this.post.creator.name }}</div>
       </div>
-      <!--        分页-->
-      <div class="block" style="margin-left: 200px">
-        <el-pagination
-            layout="prev, pager, next"
-            :total="100">
-        </el-pagination>
+      <div style="display: inline-block;position:absolute;right: 15px;top: 30px">
+        <el-button v-if="collectState" type="success" @click="quitGroup()">已加入</el-button>
+        <el-button v-else type="primary" @click="collectGroup()">加入小组</el-button>
+      </div>
+    </el-card>
+    <h2>帖子</h2>
+    <!--    头像-->
+    <div style="margin-top: 40px">
+      <el-avatar size="large" :src="post.creator.avatar"></el-avatar>
+      <div style="display: inline-block;padding: 10px">
+        <div>{{ post.creator.nickname }}</div>
+        <div style="color: #999999"> {{ post.createTime }} 发表</div>
       </div>
     </div>
 
-    <!--      右侧-->
-    <div style="width: 28%;margin-left: 20px;display: inline-block">
-      <br>
-      <el-card style="background-color: #F9F9F9">
-        <el-avatar :size="76" :src="user.photo" style="display: inline-block;float: left"></el-avatar>
-        <h2>{{ user.userName }}</h2>
-        <router-link to="/personCenter" style="text-decoration-line: none">者也主页</router-link>
-      </el-card>
+    <!--    文章-->
+    <div>
+      <h1 style="font-weight: bold;font-size: 30px;background-color: white;padding: 10px;border-radius: 5px;text-align: center">
+        {{ post.title }}</h1>
+      <img style="width:100%;" :src="post.image" alt="">
     </div>
-    <div style="width: 28%;margin-left: 20px;display: inline-block">
-      <br>
-      <h2 style="display: inline-block;font-size: 20px;margin-left: 79px">推荐加入</h2>
-      <router-link to="/group/oldUser" style="  text-decoration: none;font-size: 15px;float: right;margin-top: 20px">
-        小组主页<i class="el-icon-d-arrow-right"></i>
-      </router-link>
-      <div v-for="(item,i) in classes" :key="1">
-        <el-card :span="5" v-for="(type,j) in item.detail" :key="2" :offset="j%4 > 0 ? 1 : 0"
-                 style="padding-bottom: 25px">
-          <div :body-style="{ padding: '0px'} ">
-            <img :src="type.url" class="image" :key="3"
-                 style="display: inline-block;width: 85px;height:85px;float: left">
-            <div style="padding: 10px;">
-              <div style="font-size: 20px">{{ type.groupName }}</div>
-              <div style="font-size: 15px">{{ type.counts }}个成员</div>
-              <div>
-                <el-button type="text" class="el_link" style="color:#CA7158">+加入小组</el-button>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </div>
+
+    <div v-html="post.content" style="background-color: white;padding: 20px;border-radius: 5px;margin-top: 20px"></div>
+
+    <div style="float: right;margin-top: 50px;">
+      <el-button plain>赞</el-button>
+      <el-button plain>回复</el-button>
+      <el-button plain>分享</el-button>
     </div>
+    <!--    回复-->
 
   </div>
-
-
 </template>
 
 <script>
+import postApi from "../../../api/post"
+import groupApi from "../../../api/group";
+import userApi from "../../../api/user";
+import groupCollectApi from "../../../api/groupCollect";
+
 export default {
-  name: "Group_All",
+  name: "article",
   data() {
     return {
-      no: 1,
-      activeIndex: '1',
-      activeIndex2: '1',
-      user: {
-        photo: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-        userName: "江西网友",
-      },
-      classes: [{
-        type: "兴趣",
-        detail: [
-          {
-            url: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-            groupName: "种花种草",
-            title: "求助",
-            counts: "206541",
-          },
-          {
-            url: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-            groupName: "画画评评楼",
-            counts: "21733",
-          },
-          {
-            url: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-            groupName: "书法",
-            counts: "155304",
-          },],
-      },
-      ],
-    };
+      postId: JSON.parse(this.$route.query.postId),
+      userId: JSON.parse(window.sessionStorage.getItem("userInfo")).id,
+      post: {},
+      group: {},
+      collectState: false,
+    }
+  },
+  mounted() {
+    this.init();
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    async init() {
+      await this.getPost();
+      await this.getGroup();
+      await this.isCollect();
     },
+    //判断是否收藏
+    async isCollect() {
+      let response = await groupCollectApi.selectGroup({
+        "userId": this.userId,
+        "groupId": this.group.id,
+      });
+      response = response.data;
+      console.log(response.message);
+      if (response.code === 200) {
+        this.collectState = true;
+      }
+
+    },
+    async getPost() {
+      let postRes = await postApi.getPost(this.postId);
+      postRes = postRes.data;
+      this.post = postRes.data;
+      let creatorRes = await userApi.getUserInfo(this.post.creatorId);
+      creatorRes = creatorRes.data;
+      this.post.creator = creatorRes.data;
+      console.log(postRes.message);
+      console.log(this.post);
+    },
+    async getGroup() {
+      let groupRes = await groupApi.getGroup(this.post.groupId);
+      groupRes = groupRes.data;
+      this.group = groupRes.data;
+      console.log(groupRes.message);
+      console.log(this.group);
+    },
+    //退出小组
+    async quitGroup() {
+      let response = await groupCollectApi.deleteGroupCollect({
+        "groupId": this.group.id,
+        "userId": this.userId
+      })
+      response = response.data;
+      console.log(response.message);
+      this.collectState = false;
+      await groupApi.reduceNumber(this.group.id);
+      location.reload();
+    },
+    //加入小组
+    async collectGroup() {
+      let dt = new Date();
+      let year = dt.getFullYear();
+      let month = dt.getMonth() + 1;
+      let day = dt.getDate();
+      let time = year + "-" + month + "-" + day;
+      let response = await groupCollectApi.insertGroupCollect({
+        "collectTime": time,
+        "groupId": this.group.id,
+        "userId": this.userId
+      })
+      response = response.data;
+      console.log(response.message);
+      this.collectState = true;
+      await groupApi.addNumber(this.group.id);
+      location.reload();
+    },
+    //打开小组
+    openGroup() {
+      this.$router.push({
+        path: "/group/groupDetail",
+        query: {
+          groupId: this.group.id,
+        }
+      })
+    },
+    //返回上一级
     goBack() {
-      this.$router.go(-1);
-    },
-  }
+      this.$router.back();
+    }
+  },
 }
 </script>
 
 <style scoped>
+.group-image {
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  transition: 0.8s;
+}
+
+.group-image:hover {
+  transform: scale(0.8);
+}
 
 </style>

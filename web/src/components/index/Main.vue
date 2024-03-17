@@ -3,9 +3,8 @@
     <el-container>
       <!--      导航栏-->
       <div class="headerFather">
-        <el-header style="display: flex;justify-content: space-between">
-          <el-image :src="require('@/assets/logo.png')"
-                    style="padding: 5px">
+        <el-header class="main-header">
+          <el-image :src="require('@/assets/logo.png')" style="padding: 5px">
 
           </el-image>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
@@ -255,18 +254,40 @@ export default {
 }
 
 .el-header {
-  background-color: rgba(255, 255, 255, 0.6);
   line-height: 15px;
-  /*width: 1200px;*/
   padding: 0;
   z-index: 1000;
   position: fixed;
-  box-shadow: #1890ff;
-  box-sizing: border-box;
-  border: solid rgba(22, 22, 22, 0.1);
-  border-width: 0 2px 2px 2px;
   width: 100%;
 
 }
 
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  border: solid rgba(22, 22, 22, 0.1);
+  transition: 1s;
+  transition-property: border;
+}
+
+.main-header:hover {
+  border: solid rgba(22, 22, 22, 0.8);
+
+}
+
+.main-header::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  content: "";
+  filter: blur(5px);
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/photo2.webp");
+}
+
+.headerFather {
+  position: relative;
+}
 </style>

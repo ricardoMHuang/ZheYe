@@ -17,7 +17,7 @@ import java.util.Date;
 public class BookCollect implements Serializable {
     @TableId(value = "Id", type = IdType.AUTO)
 
-    private int id;
+    private Long id;
     private int bookId;
     private static final long serialVersionUID = 1L;
 

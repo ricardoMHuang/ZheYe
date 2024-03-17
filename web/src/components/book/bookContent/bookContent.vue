@@ -46,12 +46,11 @@
 
       <div v-if="chapterContentSplit!=null">
         <!--章节内容-->
-        <el-skeleton style="margin: 20px" :loading="loading" animated>
-        </el-skeleton>
+        <el-skeleton style="margin: 20px" :loading="loading" animated></el-skeleton>
         <h1 style="margin: 25px;">{{ this.chapter }}</h1>
-        <div v-for="item in paginatedArticles ">
+        <div v-for="item in paginatedArticles">
           <p v-if="!loading" :style="{ fontSize: fontSize + 'px' ,lineHeight:lineHeight}"
-             style="margin: 25px; ">
+             class="paragraph">
             {{ item }}</p>
         </div>
 
@@ -263,4 +262,10 @@ export default {
   border-radius: 25px;
   overflow: hidden;
 }
+
+.paragraph {
+  margin: 50px;
+  transition: 1s;
+}
+
 </style>

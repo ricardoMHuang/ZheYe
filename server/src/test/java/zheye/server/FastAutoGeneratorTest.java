@@ -23,7 +23,7 @@ public class FastAutoGeneratorTest {
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "D://ZheYeProject//trunk//Project//server//src//main//resources//Mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("book") // 设置需要生成的表名
+                    builder.addInclude("post") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")// 设置过滤表前缀
                             .controllerBuilder()
                             .enableRestStyle()

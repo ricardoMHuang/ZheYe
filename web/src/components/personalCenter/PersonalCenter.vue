@@ -20,7 +20,7 @@
                   index="/personCenter/myArticle"
               >
                 <i class="el-icon-edit-outline"></i>
-                <span slot="title">发帖</span>
+                <span slot="title">书评</span>
               </el-menu-item>
               <el-menu-item
                   index="/personCenter/myCollect"
@@ -28,10 +28,11 @@
                 <i class="el-icon-document"></i>
                 <span slot="title">我的书架</span>
               </el-menu-item>
+
             </el-menu>
           </el-card>
       </el-header>
-        <el-main style="position:relative;top:100px;width: 1200px;margin: auto">
+        <el-main style="position:relative;top:100px;width: 1200px;margin: auto;">
           <router-view></router-view>
         </el-main>
     </el-container>

@@ -1,12 +1,10 @@
 package zheye.server.controller;
 
-import zheye.server.entity.BookType;
 import zheye.server.service.BookTypeService;
 import org.springframework.web.bind.annotation.*;
 import zheye.server.utils.Result;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 
 /**
@@ -26,7 +24,7 @@ public class BookTypeController {
 
     @PostMapping("/type")
     public Result getType() {
-        return Result.ok(bookTypeService.getBookTpye());
+        return Result.ok(bookTypeService.getBookType());
     }
 }
 

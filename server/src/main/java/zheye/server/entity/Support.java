@@ -6,7 +6,8 @@ import lombok.Data;
 public class Support {
     private int userId;
     private int supportCommentId;
-    private int id;
+
+    private Long id;
 
     @Override
     public String toString() {

@@ -198,5 +198,9 @@ export default {
 </script>
 <style>
 
+/*.el-tabs__item {*/
+/*  color: #FFFFFF!* 非激活状态下的字体颜色为黑色 *!*/
+/*}*/
+
 
 </style>

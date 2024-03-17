@@ -134,15 +134,14 @@ export default {
 
 <style scoped>
 .main-box {
-
   position: relative;
-  left: 50px;
-  top: 40px;
+  top: 20px;
   width: 1000px;
   min-width: 1000px;
   min-height: 600px;
   height: 600px;
   padding: 25px;
+  margin: auto;
   background-color: #ecf0f3;
   box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9;
   border-radius: 12px;

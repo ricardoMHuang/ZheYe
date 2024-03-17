@@ -94,6 +94,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <!--七牛云上传图片服务-->
+        <!-- https://mvnrepository.com/artifact/com.qiniu/qiniu-java-sdk -->
+
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.7.0, 7.7.99]</version>
+        </dependency>
         <!--    mybatis-->
         <!-- <dependency>
              <groupId>org.mybatis</groupId>

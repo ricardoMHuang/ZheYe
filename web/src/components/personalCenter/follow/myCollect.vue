@@ -1,19 +1,21 @@
 <template>
-  <div class="div1" style="width: 100%;">
-    <el-card class="box-card" v-for="(bookCollect,index) in allData" :key="bookCollect">
+  <div>
+    <el-card style="margin-bottom: 20px" v-for="(bookCollect,index) in allData" :key="bookCollect">
       <div slot="header" class="clearfix">
         <el-button style="float: right; padding: 3px 1px;" type="danger" icon="el-icon-delete"
                    @click="open(bookCollect,index)">删除
         </el-button>
       </div>
       <div class="text item">
-        <el-card :body-style="{padding: 0}" style="width: 120px;height:170px; float: left;">
-          <el-image :src="bookCollect.imageUrl" :lazy='true' style="width: 150px; float: left;height: 150px"/>
+        <el-card :body-style="{padding: 0}" style="width: 120px;height:170px; float: left;margin-top: 20px">
+          <el-image @click="openBook(bookCollect.bookId)" :src="bookCollect.imageUrl" :lazy='true'
+                    style="width: 100%; float: left;height:100%;cursor: pointer"/>
         </el-card>
         <div class="bookCoDetail">
           <h2>{{ bookCollect.bookName }}</h2>
           <span style="color: #99a9bf">{{ bookCollect.author }}    【{{ bookCollect.country }}】</span><br/>
-          <p style="line-height: 18px; width: 860px">&nbsp;&nbsp;简介:{{ bookCollect.detail }}</p>
+          <p style="line-height: 25px; width: 860px;position: relative;top:-20px;text-overflow: ellipsis; overflow: hidden;">
+            &nbsp;&nbsp;简介:{{ bookCollect.detail }}</p>
         </div>
       </div>
     </el-card>
@@ -99,7 +101,14 @@ export default {
       });
 
     },
-
+    openBook(id) {
+      this.$router.push({
+        path: "/book/bookDetail",
+        query: {
+          bookId: id,
+        }
+      })
+    },
     async load() {
       let userId = JSON.parse(window.sessionStorage.getItem('userInfo')).id;
       let res = await bookCollectApi.bookCollection({userId: userId});
@@ -124,9 +133,14 @@ export default {
 }
 
 .item {
-  margin-bottom: 18px;
 
+  transition: 1s;
 }
+
+.item:hover {
+  transform: scale(0.98);
+}
+
 
 .clearfix:before,
 .clearfix:after {

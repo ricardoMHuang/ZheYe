@@ -81,6 +81,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User getUserInfo(long userId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", userId);
+        return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
     public User findUserList(User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!ObjectUtils.isEmpty(user.getEmail()), "email", user.getEmail());

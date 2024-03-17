@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface BookTypeService extends IService<BookType> {
 
-    List<BookType> getBookTpye();
+    List<BookType> getBookType();
 }
 

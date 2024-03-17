@@ -19,7 +19,7 @@ import java.util.List;
 public class BookTypeServiceImpl extends ServiceImpl<BookTypeMapper, BookType> implements BookTypeService {
 
     @Override
-    public List<BookType> getBookTpye() {
+    public List<BookType> getBookType() {
         QueryWrapper<BookType> queryWrapper = new QueryWrapper<>();
         return baseMapper.selectList(queryWrapper);
     }
