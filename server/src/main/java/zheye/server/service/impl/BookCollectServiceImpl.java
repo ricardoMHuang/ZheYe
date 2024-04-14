@@ -24,8 +24,10 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
     @Override
     public List<BookCollect> bookCoItem(BookCollect bookCollect) {
         QueryWrapper<BookCollect> queryWrapper = new QueryWrapper<>();
+        System.out.println("///////////////////");
+        System.out.println(bookCollect.getUserId());
         queryWrapper.eq(!ObjectUtils.isEmpty(bookCollect.getUserId()), "user_id", bookCollect.getUserId());
-//        System.out.print(baseMapper.selectList(queryWrapper));
+        System.out.print(baseMapper.selectList(queryWrapper));
         return baseMapper.selectList(queryWrapper);
     }
 
@@ -48,6 +50,13 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
     public BookCollect selectBookCollect(BookCollect bookCollect) {
 
         return baseMapper.selectBookCollect(bookCollect);
+    }
+
+    @Override
+    public List<BookCollect> selectCollectByBookId(Long bookId) {
+        QueryWrapper<BookCollect> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("book_id", bookId);
+        return baseMapper.selectList(queryWrapper);
     }
 
 }

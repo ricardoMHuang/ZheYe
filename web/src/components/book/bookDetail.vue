@@ -339,7 +339,8 @@ export default {
             content: this.ruleForm2.checkComment,
             bookId: this.book.id,
             commentId: this.commentId,
-            publish_time: time
+            publish_time: time,
+            rate: 0,
           });
           console.log(res.data)
           this.drawer = false;

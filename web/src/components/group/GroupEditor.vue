@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: white;margin: auto;">
+  <div style="background-color: white;margin: auto;padding: 15px">
     <h1>你好！我是post编辑器,请选择封面</h1>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
       <el-form-item prop="checkCoverUrl">

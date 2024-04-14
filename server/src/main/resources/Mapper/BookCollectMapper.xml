@@ -3,7 +3,7 @@
 <mapper namespace="zheye.server.mapper.BookCollectMapper">
     <delete id="deleteBookCollection" parameterType="object">
         delete
-        from bookcollect
+        from book_collect
         where
         <if test="bookId!=null and bookId!=''">
             book_id = #{bookId}
@@ -15,7 +15,7 @@
     </delete>
 
     <select id="selectBookCollect" parameterType="object" resultType="zheye.server.entity.BookCollect">
-        select * from bookcollect
+        select * from book_collect
         where
         <if test="bookId!=null and bookId!=''">
             book_id = #{bookId}
@@ -27,8 +27,8 @@
 
 
     <insert id="addBookCollection" parameterType="object">
-        insert into bookcollect (id, book_id, user_id, image_url, author, create_time, detail, book_name, country,
-                                 state)
+        insert into book_collect (id, book_id, user_id, image_url, author, create_time, detail, book_name, country,
+                                  state)
         values (#{id}, #{bookId}, #{userId}, #{imageUrl}, #{author}, NOW(), #{detail}, #{bookName}, #{country},
                 #{state})
     </insert>

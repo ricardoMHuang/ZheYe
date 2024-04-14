@@ -38,18 +38,8 @@
         <h2>精选书评</h2>
         <book-comment :reviewList="reviewList"></book-comment>
 
-
-        <h2>热门标签</h2>
-        <div>
-          <el-row>
-            <el-col v-for="(o,index) in typeList" :key="o" :span="3" :offset="1 " style="padding-bottom: 10px">
-              <el-button size="mini" plain @click="openCategory">{{ o.type }}</el-button>
-            </el-col>
-          </el-row>
-        </div>
-
         <h2>排行</h2>
-        <rank :sellingList="sellingList"></rank>
+        <rank></rank>
       </div>
     </div>
   </div>
@@ -118,28 +108,6 @@ export default {
         {type: "武侠"},
         {type: "文学"},
         {type: "小说"},
-      ],
-      sellingList: [
-        {
-          image: "https://img2.baidu.com/it/u=3355660545,3331057139&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=645",
-          bookName: "平凡的世界",
-          author: "路遥",
-        },
-        {
-          image: "https://img2.baidu.com/it/u=3355660545,3331057139&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=645",
-          bookName: "平凡的世界",
-          author: "路遥",
-        },
-        {
-          image: "https://img2.baidu.com/it/u=3355660545,3331057139&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=645",
-          bookName: "平凡的世界",
-          author: "路遥",
-        },
-        {
-          image: "https://img2.baidu.com/it/u=3355660545,3331057139&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=645",
-          bookName: "平凡的世界",
-          author: "路遥",
-        },
       ],
       bookTypeList: [
         {type: "小说"},
@@ -216,17 +184,6 @@ export default {
         path: '/book/bookDetail',
         query: {
           bookId: val,
-        }
-      })
-    },
-    openCategory(val) {
-      let type = new Array(this.typeList.length);
-      for (let i = 0; i < this.bookTypeList.length; i++) type[i] = this.bookTypeList[i].type;
-      this.$router.push({
-        path: '/book/category',
-        query: {
-          id: val,
-          typeList: JSON.stringify(type)
         }
       })
     },

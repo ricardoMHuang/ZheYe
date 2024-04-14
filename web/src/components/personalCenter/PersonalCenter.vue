@@ -20,7 +20,7 @@
                   index="/personCenter/myArticle"
               >
                 <i class="el-icon-edit-outline"></i>
-                <span slot="title">书评</span>
+                <span slot="title">消息</span>
               </el-menu-item>
               <el-menu-item
                   index="/personCenter/myCollect"

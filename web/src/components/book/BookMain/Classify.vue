@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col v-for="(o,index) in bookTypeList" :span="6">
-        <el-link v-if="index!==bookTypeList.length-1" :underline="false" @click="openCategory(o.type)">
+        <el-link v-if="index!==bookTypeList.length-1" :underline="false" @click="openCategory(o.id)">
           <h3 style="margin-bottom: 0">{{ o.type }}·{{ o.totalQuantity }}本 </h3>
           <el-divider></el-divider>
         </el-link>
@@ -13,12 +13,34 @@
 </template>
 
 <script>
+import bookTypeApi from "../../../../api/booktype";
+
 export default {
   name: "Classify",
-  props: ["bookTypeList"],
+  data() {
+    return {
+      bookTypeList: [],
+
+    }
+  },
+  mounted() {
+    this.getBookTypeList();
+  },
   methods: {
-    openCategory(type) {
-      this.$parent.openCategory(type)
+    openCategory(id) {
+      this.$router.push({
+        path: '/book/category',
+        query: {
+          id: id,
+        }
+      })
+    },
+    async getBookTypeList() {
+      let res = await bookTypeApi.getBookType();
+      res = res.data;
+      console.log(res.message);
+      console.log(res.data)
+      this.bookTypeList = res.data;
     },
   }
 }

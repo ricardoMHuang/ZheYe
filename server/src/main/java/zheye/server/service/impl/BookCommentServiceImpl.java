@@ -33,18 +33,12 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
     public Object getComment(int bookId) throws InvocationTargetException, IllegalAccessException {
 
         List<UserComment> commentList = baseMapper.selectUserAndCommentList(bookId);
-        System.out.println("_________________________________");
-//        System.out.println(commentList);
 //        按点赞数将评论排序
-        commentList.sort(new Comparator<UserComment>() {
-            @Override
-            public int compare(UserComment bookComment1, UserComment bookComment2) {
-                return bookComment2.getSupportNum() - bookComment1.getSupportNum();
-            }
-        });
+        commentList.sort(Comparator.comparing(UserComment::getSupportNum).reversed());
         List<UserComment> parentCommentList = new ArrayList<>();
         List<UserComment> allChildCommentList = new ArrayList<>();
-        Map<Integer, Integer> map = new HashMap<>();//用于记录父子评论的关系
+        //用于记录父子评论的关系
+        Map<Integer, Integer> map = new HashMap<>();
         //分离父子评论，初始化map
         for (UserComment userComment : commentList) {
             if (userComment.getCommentId() == 0) {
@@ -81,7 +75,6 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
             propertiesMap.put("childCommentList", childCommentList);
             obj.add(ReflectUtil.getObject(parentComment, propertiesMap));
         }
-//        System.out.println(obj);
         return obj;
     }
 
@@ -111,6 +104,13 @@ public class BookCommentServiceImpl extends ServiceImpl<BookCommentMapper, BookC
     public List<BookComment> selectCommentByCommentId(int commentId) {
         QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("comment_id", commentId);
+        return baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<BookComment> selectCommentByBookId(long bookId) {
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("book_id", bookId);
         return baseMapper.selectList(queryWrapper);
     }
 

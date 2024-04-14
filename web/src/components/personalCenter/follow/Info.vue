@@ -131,10 +131,11 @@
           {{ userInfo.createDate |formatDate('yyyy-MM-dd') }}
         </el-descriptions-item>
       </el-descriptions>
-      <el-button type="primary" v-if="$route.params.id==$store.state.id" v-loading.fullscreen.lock="fullscreenLoading"
-                 @click="openFullScreen1" size="small">点击修改
+      <el-button type="primary" v-if="$route.params.id===$store.state.id" v-loading.fullscreen.lock="fullscreenLoading"
+                 @click="openFullScreen1" size="small" style="margin: 20px 10px 0 0 ">点击修改
       </el-button>
-
+      <el-button type="warning" @click="quit()" size="small" style="margin: 20px 0 0 0 ">退出登录
+      </el-button>
     </el-card>
   </div>
 </template>
@@ -244,12 +245,18 @@ export default {
       var cur = myDate.getFullYear();
       this.userInfo.age = (cur - value);
     },
+    //退出登录
+    quit() {
+      this.$router.push({
+        path: "/login",
+      },)
+    }
   },
   created() {
 
     this.init();
     this.load();
-  }
+  },
 };
 </script>
 

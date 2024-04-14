@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("bookCollect")
+@TableName("book_collect")
 public class BookCollect implements Serializable {
     @TableId(value = "Id", type = IdType.AUTO)
 
@@ -21,7 +21,7 @@ public class BookCollect implements Serializable {
     private int bookId;
     private static final long serialVersionUID = 1L;
 
-    private int userId;
+    private Long userId;
 
     private String imageUrl;
 

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Support {
-    private int userId;
+    private Long userId;
     private int supportCommentId;
 
     private Long id;

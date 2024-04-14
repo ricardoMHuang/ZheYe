@@ -25,9 +25,9 @@ public class BookComment extends Model<BookComment> {
 
     private String content;
 
-    private Integer bookId;
+    private Long bookId;
 
-    private Integer userId;
+    private Long userId;
 
     private String publishTime;
 

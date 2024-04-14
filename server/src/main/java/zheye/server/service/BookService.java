@@ -18,7 +18,11 @@ public interface BookService {
 
     String getBookName(int bookId);
 
-    Book getBookById(int bookId);
+    Book getBookById(Long bookId);
+
+    List<Book> getHotList();
+
+    List<Book> getBookByType(int id);
 
 
     /*  List<Book> getBooksByType();*/

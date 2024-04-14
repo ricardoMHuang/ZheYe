@@ -3,19 +3,29 @@
     <!--返回上一页-->
     <el-page-header @back="goBack" content="分类榜单" style="padding: 20px"></el-page-header>
 
-    <el-tabs :tab-position="tabPosition">
-      <el-tab-pane :label="o.type" v-for="(o,index) in typeList">
-        <h2 style="margin-bottom: 80px">{{ o.type }}</h2>
-        <div v-for="(l,i) in o.list" style="height: 200px;margin-bottom: 10px">
-          <h3 class="rank">{{ i + 1 }}</h3>
-          <el-card :body-style="{padding:0}" style="float: left;width: 12%;margin-left: 20px">
-            <img :src="l.url" class="image">
+    <el-tabs :tab-position="tabPosition" v-model="activateId" @tab-click="handleClick">
+      <el-tab-pane :label="o.type" v-for="(o,index) in bookTypeList" :name="o.id">
+        <h2 style="margin-bottom: 80px;color: white">{{ o.type }}</h2>
+        <div v-for="(l,i) in bookList" style="margin-bottom: 40px;display: flex;height: 150px">
+          <div class="rank-father">
+            <div class="rank">{{ i + 1 }}</div>
+          </div>
+          <el-card :body-style="{padding:0}" style="width: 100px;height: 140px">
+            <img :src="l.image" class="image" @click="openBook(l.id)">
           </el-card>
           <div class="wenBen">
-            <h3 style="margin-top: 0">{{ l.bookName }}</h3>
-            <h4 style="color: #999999;">[{{ l.country }}] {{ l.author }}</h4>
-            <p class="textOverflow" @click="openArticle">
-              {{ l.detail }}
+            <h3 style="margin-top: 0">{{ l.name }}</h3>
+            <div>
+              <el-rate
+                  v-model="l.score"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}">
+              </el-rate>
+            </div>
+            <p class="textOverflow">
+              {{ l.briefIntroduction }}
             </p>
             <el-divider></el-divider>
           </div>
@@ -35,129 +45,17 @@
 
 <script>
 import bookApi from "@/../api/book"
+import bookTypeApi from "../../../api/booktype";
 
 export default {
   name: "category",
   data() {
     return {
       count: 0,
+      activateId: parseInt(this.$route.query.id, 10),
       tabPosition: 'left',
-      typeList: [
-        {
-          type: "文学",
-          list: [
-            {
-              id: 1,
-              type: "文学",
-              url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2F81ffb8e9-dda3-88ae-c67e-298be8f7584a%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1672664302&t=5f05e8b359f51b461580872d493bd62c",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里",
-              detail: "本书用活泼的语言、漫画的形式，结合历史故事，使读者从整体上可以快速了解整个欧洲建筑的发展历史，包括西方建筑的老祖宗为什么在古希腊，罗马角斗场是否是帝国的维稳工具，哥特式大教堂怎么就成了黑暗化身，等等。本书适合欧洲建筑爱好者、初学者阅读，也适合喜欢建筑历史文化的大众读者阅读。\n"
-            },
-            {
-              id: 1,
-              type: "文学",
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              type: "文学",
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-          ]
-        },
-        {
-          type: "小说",
-          list: [
-            {
-              id: 1,
-              type: "文学",
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-          ]
-        },
-        {
-          type: "散文",
-          list: [
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-          ]
-        },
-        {
-          type: "散文",
-          list: [
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-          ]
-        },
-        {
-          type: "散文",
-          list: [
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-            {
-              id: 1,
-              url: "https://img1.baidu.com/it/u=590709266,2477320825&fm=253&fmt=auto&app=120&f=JPEG?w=372&h=333",
-              bookName: "我的辽阔天地",
-              country: "法",
-              author: "卡特琳·默里"
-            },
-          ]
-        },
-      ]
+      bookTypeList: [],
+      bookList: [],
     };
   },
   mounted() {
@@ -166,29 +64,43 @@ export default {
   methods: {
     /*页面初始化*/
     async init() {
-      /*  let res=await bookApi.getBookBytype(this.$route.query.id);*/
-      let typeList = JSON.parse(this.$route.query.typeList);
-
-      for (let i = 0; i < typeList.length; i++) {
-        this.typeList[i].type = typeList[i];
-
-      }
+      await this.getBookTypeList();
+      await this.getBookList();
     },
     //返回上一级
     goBack() {
       this.$router.back();
     },
-    openArticle() {
-      this.$router.push({
-        path: '/book/article',
-        query: {
-          id: 1,
-        }
-      })
+    async getBookTypeList() {
+      let res = await bookTypeApi.getBookType();
+      res = res.data;
+      console.log(res.message);
+      console.log(res.data)
+      this.bookTypeList = res.data;
+    },
+    async getBookList() {
+      let res = await bookApi.getBookByType(this.activateId);
+      res = res.data;
+      console.log(res.message);
+      console.log(res.data);
+      this.bookList = res.data;
+    },
+    handleClick(tab, event) {
+      console.log(tab, event); // 输出被点击的标签页信息和事件对象
+      // 在这里可以添加你需要的逻辑处理代码
+      this.getBookList();
     },
     load() {
       this.count += 2
     },
+    openBook(id) {
+      this.$router.push({
+        path: "/book/bookDetail",
+        query: {
+          bookId: id,
+        },
+      })
+    }
   }
 }
 </script>
@@ -214,12 +126,33 @@ export default {
   cursor: pointer;
 }
 
+.rank-father {
+  position: relative;
+  height: 50px;
+  margin: auto;
+}
+
 .rank {
-  width: 8%;
-  float: left;
-  margin-top: 70px;
+  position: relative;
+  margin: auto;
   font-size: 25px;
-  font-style: italic;
+  color: #e92758;
+  padding: 2px;
+  border: solid rgba(255, 255, 255, 0.5) 5px;
+  border-radius: 20px;
+  box-sizing: border-box; /* 包括 padding 和 border 在内的宽度和高度 */
+}
+
+.rank:after {
+  z-index: -1;
+  content: "";
+  background-color: rgba(162, 160, 160, 0.85);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 20px;
+  position: absolute;
 }
 
 .wenBen {
@@ -227,5 +160,13 @@ export default {
   text-align: left;
   width: 70%;
   margin-left: 50px;
+  background-image: linear-gradient(to right, #ff9569 0%, #e92758 100%);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* 通过 CSS 类选择器来定位并修改 el-tabs 的标签字体大小 */
+>>> .el-tabs__item {
+  font-size: 20px; /* 设置你想要的字体大小 */
 }
 </style>

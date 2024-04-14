@@ -12,7 +12,14 @@
 
           <div style="display: inline-block;padding: 10px">
             <div>{{ comment.nickname }}</div>
-            <div> {{ comment.publishTime }} 回复</div>
+            <div>发表于 {{ comment.publishTime }}</div>
+            <el-rate
+                v-model="comment.rate"
+                disabled
+                show-score
+                text-color="#ff9900"
+                score-template="{value}">
+            </el-rate>
           </div>
         </div>
 
@@ -57,26 +64,42 @@
         :title="user.nickname"
         :visible.sync="showInformation"
         width="40%">
-      <div style="display: flex">
-        <el-avatar :src="user.avatar"></el-avatar>
-        <h3> ip:{{ this.user.area }} 爱好:{{ this.user.hobby }}</h3>
-      </div>
-      <h3>ta的书架</h3>
-      <div style="display: flex;flex-wrap: wrap;">
-        <div v-for="book in this.userBookList" style="width:60px; margin: 10px">
-          <el-card :body-style="{padding: 0}" style="width: 60px;height: 80px;">
-            <img :src="book.imageUrl" class="image" @click="openBook(book.bookId)">
-          </el-card>
-          <div>{{ book.bookName }}</div>
+      <div style="overflow: scroll;height: 400px">
+        <div style="display: flex">
+          <el-avatar :src="user.avatar"></el-avatar>
+          <h3> ip:{{ this.user.area }} 爱好:{{ this.user.hobby }}</h3>
         </div>
-      </div>
-      <h3>ta的小组</h3>
-      <div style="display: flex;flex-wrap: wrap;">
-        <div v-for="group in uColtGroupList" style="width:85px; margin: 10px">
-          <el-card :body-style="{padding: 0}" style="width:85px;height: 85px;">
-            <img :src="group.image" class="group-image" @click="openGroup(group.id)">
-          </el-card>
-          <div>{{ group.name }}</div>
+        <h3>ta的书架</h3>
+        <div style="display: flex;flex-wrap: wrap;">
+          <div v-for="book in this.userBookList" style="width:60px; margin: 10px">
+            <el-card :body-style="{padding: 0}" style="width: 60px;height: 80px;">
+              <img :src="book.imageUrl" class="image" @click="openBook(book.bookId)">
+            </el-card>
+            <div>{{ book.bookName }}</div>
+          </div>
+        </div>
+        <h3>ta的小组</h3>
+        <div style="display: flex;flex-wrap: wrap;">
+          <div v-for="group in uColtGroupList" style="width:85px; margin: 10px">
+            <el-card :body-style="{padding: 0}" style="width:85px;height: 85px;">
+              <img :src="group.image" class="group-image" @click="openGroup(group.id)">
+            </el-card>
+            <div>{{ group.name }}</div>
+          </div>
+        </div>
+        <h3>ta的帖子</h3>
+        <div v-for="post in uPostList">
+          <div class="post-card" @click="openPost(post.id)" style="border:1px solid rgba(1,22,22,0.5);margin: 10px 0">
+            <img :src="post.image" alt="" class="group-image">
+            <div style="margin-left: 10px">
+              <h2>{{ post.title }}</h2>
+              <div>
+                <i class="el-icon-thumb">{{ post.supportNum }}</i>
+                <i class="el-icon-chat-line-round">{{ post.commentsNum }}</i>
+                <i class="el-icon-time">{{ post.createTime }}</i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </el-dialog>
@@ -89,6 +112,7 @@ import userApi from "../../../../api/user"
 import bookCollectApi from "../../../../api/bookCollect";
 import groupCollectApi from "../../../../api/groupCollect";
 import groupApi from "../../../../api/group";
+import postApi from "../../../../api/post";
 
 export default {
   name: "CommentDetail",
@@ -98,7 +122,8 @@ export default {
       uColtGroupList: [],
       showInformation: false,
       user: {},
-      userBookList: {},
+      userBookList: [],
+      uPostList: [],
     }
   },
   methods: {
@@ -110,15 +135,18 @@ export default {
     },
     async openUserInformation(userId) {
       this.showInformation = !this.showInformation
+      //获取用户名称和头像
       let userResponse = await userApi.getUserInfo(userId);
       userResponse = userResponse.data;
       console.log(userResponse.message);
       this.user = userResponse.data;
       console.log(this.user)
+      //获取用户收藏的书
       let uColtBookRes = await bookCollectApi.bookCollection({userId: userId});
       uColtBookRes = uColtBookRes.data;
       this.userBookList = uColtBookRes.data;
       console.log(this.userBookList)
+      // 获取用户的小组
       let response = await groupCollectApi.selectGroupByUserId(userId)
       response = response.data;
       if (response.code === 200) {
@@ -132,7 +160,14 @@ export default {
         }
       }
       console.log(this.uColtGroupList)
+      //获取用户发布的贴子
+      let postListRes = await postApi.getPostByUserId(userId);
+      postListRes = postListRes.data;
+      this.uPostList = postListRes.data;
+      console.log(postListRes.message);
+      console.log(this.uPostList);
     },
+    //打开书
     openBook(val) {
       // 变成 /user?id=1
       this.$router.push({
@@ -142,6 +177,15 @@ export default {
         }
       })
       location.reload();
+    },
+    //打开帖子详情
+    openPost(postId) {
+      this.$router.push({
+        path: "/group/groupPost",
+        query: {
+          postId: postId,
+        }
+      })
     },
     //查看小组详情
     openGroup(id) {
@@ -176,7 +220,6 @@ export default {
 }
 
 .commentCard:hover {
-  transform: scale(0.97);
   background-color: white;
 }
 
@@ -232,6 +275,20 @@ export default {
 
 .group-image:hover {
   transform: scale(0.8);
+}
+
+.post-card {
+  display: flex;
+  justify-content: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 1s;
+  background-color: white;
+  margin: 10px 0;
+}
+
+.post-card:hover {
+  transform: scale(0.9);
 }
 
 </style>

@@ -14,5 +14,7 @@ import java.util.List;
 public interface BookTypeService extends IService<BookType> {
 
     List<BookType> getBookType();
+
+    int updateQuantity(int id, int totalQuantity);
 }
 

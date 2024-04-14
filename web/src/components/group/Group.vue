@@ -176,7 +176,13 @@ export default {
       let dt = new Date();
       let year = dt.getFullYear();
       let month = dt.getMonth() + 1;
+      if (month < 10) {
+        month = "0" + month;
+      }
       let day = dt.getDate();
+      if (day < 10) {
+        day = "0" + day;
+      }
       let time = year + "-" + month + "-" + day;
       let isSuccess = await groupCollectApi.insertGroupCollect({
         'groupId': groupId,
@@ -188,7 +194,6 @@ export default {
       console.log(isSuccess.message);
       await this.getMyGroupSum();
       await this.getClasses();
-
     },
     //退出小组
     async quitGroup(groupId) {

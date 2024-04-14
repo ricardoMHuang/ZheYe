@@ -18,5 +18,5 @@ public interface BookMapper extends BaseMapper<Book> {
 
     String selectBookName(int bookId);
 
-    Book getBookById(int bookId);
+    Book getBookById(Long bookId);
 }

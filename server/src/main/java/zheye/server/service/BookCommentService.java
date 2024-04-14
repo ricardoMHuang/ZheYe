@@ -27,5 +27,8 @@ public interface BookCommentService extends IService<BookComment> {
     List<BookComment> getCommentByUserId(int userId);
 
     List<BookComment> selectCommentByCommentId(int commentId);
+
+    List<BookComment> selectCommentByBookId(long bookId);
+
 }
 

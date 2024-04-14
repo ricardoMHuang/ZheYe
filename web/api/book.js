@@ -7,8 +7,8 @@ export default {
     async bookItem(params) {
         return await http.post("frontApi/book/bookItem", params);
     },
-    async getBookBytype(params) {
-        return await http.post("frontApi/book/bookByType", params);
+    async getBookByType(params) {
+        return await http.post("frontApi/book/getBookByType", params);
     },
     async delete(params) {
         return await http.post("frontApi/book/delete", params);
@@ -19,5 +19,14 @@ export default {
     },
     getBookById(bookId) {
         return http.post("frontApi/book/getBookById", bookId);
+    },
+    getRecommendList(id) {
+        return http.post("frontApi/book/getRecommendList", id);
+    },
+    getRateList() {
+        return http.post("frontApi/book/getRateList");
+    },
+    getCollectList() {
+        return http.post("frontApi/book/getCollectList");
     }
 }

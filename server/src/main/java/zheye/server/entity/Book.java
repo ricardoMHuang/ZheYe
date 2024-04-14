@@ -46,7 +46,7 @@ public class Book implements Serializable {
      */
     private String publish;
 
-    private String bookType;
+    private int typeId;
 
 
 }

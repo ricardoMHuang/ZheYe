@@ -32,8 +32,23 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     }
 
     @Override
-    public Book getBookById(int bookId) {
+    public Book getBookById(Long bookId) {
         return baseMapper.getBookById(bookId);
+    }
+
+    @Override
+    public List<Book> getHotList() {
+        //协同过滤算法
+
+        return null;
+
+    }
+
+    @Override
+    public List<Book> getBookByType(int id) {
+        QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type_id", id);
+        return baseMapper.selectList(queryWrapper);
     }
 
 }
