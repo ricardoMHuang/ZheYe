@@ -25,9 +25,9 @@
             ></el-autocomplete>
             <i class="el-icon-search" style="color: rgba(118,148,255,1); margin-left: 15px" @click="searchBook"></i>
           </div>
-
+          <!--头像-->
           <div style="padding: 5px 0">
-            <div class="avater" @click="infoView">
+            <div class="avatar" @click="infoView">
               <el-avatar shape="circle" :size="40" :src="useInfo.circleUrl"></el-avatar>
               <span @click="infoView" class="username">{{ useInfo.username }}</span>
             </div>
@@ -106,10 +106,9 @@ export default {
         alert("请先登录")
         this.$router.push('/login')
       } else {
-
         console.log(this.useInfo)
         console.log("已登录")
-        this.$router.push('/personCenter')
+        this.$router.push('/personCenter/info')
       }
     },
     searchBook() {
@@ -194,11 +193,11 @@ export default {
   background-color: rgba(53, 53, 53, 0) !important;
 }
 
-.avater {
+.avatar {
   margin-right: 20px;
 }
 
-.avater:hover {
+.avatar:hover {
   animation: tada 1s ease both;
   -moz-animation: tada 1s ease both;
   cursor: pointer;

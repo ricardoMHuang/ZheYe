@@ -71,9 +71,9 @@
 
 <script>
 
-import directoryApi from "../../../../api/directory";
-import bookApi from "../../../../api/book";
-import authorApi from "../../../../api/author";
+import directoryApi from "../../../api/directory";
+import bookApi from "../../../api/book";
+import authorApi from "../../../api/author";
 
 export default {
   name: "bookConnect",

@@ -48,4 +48,9 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
         return baseMapper.update(null, updateWrapper);
     }
 
+    @Override
+    public List<Group> selectList(List<Long> groupIdList) {
+        return baseMapper.selectGroupsByUserIdList(groupIdList);
+    }
+
 }

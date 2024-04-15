@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import directoryApi from "@/../api/directory";
+import directoryApi from "../../../api/directory";
 import articleApi from "../../../api/article";
 import bookDetailApi from "../../../api/bookDetail";
 import supportApi from "../../../api/support";
@@ -119,8 +119,8 @@ import userApi from "../../../api/user";
 import bookCollectApi from "../../../api/bookCollect";
 import bookApi from "../../../api/book"
 import authorApi from "../../../api/author"
-import BookInformation from "@/components/book/BookDetail/BookInformation";
-import CommentDetail from "@/components/book/BookDetail/CommentDetail";
+import BookInformation from "@/components/book/bookDetailComponent/BookInformation";
+import CommentDetail from "@/components/book/bookDetailComponent/CommentDetail";
 
 export default {
   name: "newBook",

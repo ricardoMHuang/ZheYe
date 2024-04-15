@@ -5,17 +5,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zheye.server.entity.Group;
+import zheye.server.entity.GroupCollect;
 import zheye.server.service.GroupService;
+import zheye.server.service.IGroupCollectService;
 import zheye.server.utils.Result;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("frontApi/group")
 public class GroupController {
     @Resource
     private GroupService groupService;
+
+    @Resource
+    private IGroupCollectService iGroupCollectService;
 
     @PostMapping("/getGroup")
     public Result getGroup(@RequestBody int id) {
@@ -36,6 +42,18 @@ public class GroupController {
             return Result.ok(groupList).message("查询所有小组成功");
         } else {
             return Result.error().message("查询所有小组失败");
+        }
+    }
+
+    @PostMapping("/getUJGroupList")
+    public Result getGroupList(@RequestBody int userId) {
+        List<GroupCollect> groupCollectList = iGroupCollectService.selectGroupByUserId(userId);
+        List<Long> groupIdList = groupCollectList.stream().map(GroupCollect::getGroupId).collect(Collectors.toList());
+        List<Group> groupList = groupService.selectList(groupIdList);
+        if (groupList != null) {
+            return Result.ok(groupList).message("查询用户的小组成功");
+        } else {
+            return Result.error().message("查询小组失败");
         }
     }
 

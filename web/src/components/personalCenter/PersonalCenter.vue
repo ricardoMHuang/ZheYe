@@ -9,24 +9,23 @@
                 router
                 active-text-color="#00c3ff"
                 mode="horizontal"
-                default-active="autoIndex"
+                :default-active="autoIndex"
             >
-              <el-menu-item
-                  index="/personCenter/info">
+              <el-menu-item index="/personCenter/info">
                 <i class="el-icon-user"></i>
                 <span slot="title">个人简介</span>
               </el-menu-item>
-              <el-menu-item
-                  index="/personCenter/myArticle"
-              >
+              <el-menu-item index="/personCenter/groupManage">
                 <i class="el-icon-edit-outline"></i>
+                <span slot="title">小组管理</span>
+              </el-menu-item>
+              <el-menu-item index="/personCenter/myArticle">
+                <i class="el-icon-news"></i>
                 <span slot="title">消息</span>
               </el-menu-item>
-              <el-menu-item
-                  index="/personCenter/myCollect"
-              >
-                <i class="el-icon-document"></i>
-                <span slot="title">我的书架</span>
+              <el-menu-item index="/personCenter/myCollect">
+                <i class="el-icon-tickets"></i>
+                <span slot="title">书架</span>
               </el-menu-item>
 
             </el-menu>

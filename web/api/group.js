@@ -5,6 +5,10 @@ export default {
         return await http.post("frontApi/group/getGroupListByClass", typeId);
 
     },
+    async getUJGroupList(userId) {
+        return await http.post("frontApi/group/getUJGroupList", userId);
+
+    },
     async getGroup(groupId) {
         return await http.post("frontApi/group/getGroup", groupId);
     },

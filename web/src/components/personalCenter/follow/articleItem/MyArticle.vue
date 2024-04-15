@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ReaderArticle from "@/components/book/BookMain/ReaderArticle";
+import ReaderArticle from "@/components/book/bookComponent/ReaderArticle";
 
 export default {
   name: "MyArticle",

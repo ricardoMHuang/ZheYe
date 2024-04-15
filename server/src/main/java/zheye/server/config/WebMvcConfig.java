@@ -9,7 +9,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        String path = "D:\\ZheYeProject\\trunk\\Project\\server\\src\\main\\resources\\static\\";//映射的本地路径
+        String path = "D:\\ZheYeProject\\trunk\\Project\\server\\src\\main\\resources\\";//映射的本地路径
         registry.addResourceHandler("/file/**").addResourceLocations("file:" + path);
 
     }

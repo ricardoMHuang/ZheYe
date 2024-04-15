@@ -86,7 +86,7 @@ export default {
     async init() {
       await this.getBookAndAuthor();
       await this.getArticle();
-      this.isState();
+      await this.isState();
     },
     //获取文章信息
     async getArticle() {

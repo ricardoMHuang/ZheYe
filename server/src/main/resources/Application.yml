@@ -58,6 +58,6 @@ mybatis-plus:
 #配置文件存储路径
 file:
   rootPath: "D:/ZheYeProject/trunk/Project"
-  sonPath: "/server/src/main/resources/static/img/"
+  sonPath: "/server/src/main/resources/img/"
   localPath: http://localhost:8882/file/img/
 

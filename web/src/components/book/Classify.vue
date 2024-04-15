@@ -6,14 +6,14 @@
           <h3 style="margin-bottom: 0">{{ o.type }}·{{ o.totalQuantity }}本 </h3>
           <el-divider></el-divider>
         </el-link>
-        <el-link v-if="index===bookTypeList.length-1" @click="openCategory"><h3>查看全部 >></h3></el-link>
+        <el-link v-if="index===bookTypeList.length-1" @click="openCategory(1)"><h3>查看全部 >></h3></el-link>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import bookTypeApi from "../../../../api/booktype";
+import bookTypeApi from "../../../api/booktype";
 
 export default {
   name: "Classify",

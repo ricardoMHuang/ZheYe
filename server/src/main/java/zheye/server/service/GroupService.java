@@ -14,4 +14,5 @@ public interface GroupService {
 
     int reduceNumber(int groupId);
 
+    List<Group> selectList(List<Long> groupIdList);
 }

@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import bookApi from "@/../api/book"
-import bookTypeApi from "../../../api/booktype";
+import bookApi from "../../../../api/book"
+import bookTypeApi from "../../../../api/booktype";
 
 export default {
   name: "category",

@@ -5,20 +5,22 @@ import Book from "@/components/book/Book";
 import PersonalCenter from "@/components/personalCenter/PersonalCenter";
 import Info from "@/components/personalCenter/follow/Info";
 import myArticle from "@/components/personalCenter/follow/myMessage";
-import myCollect from "@/components/personalCenter/follow/myCollect";
-import bookDetail from "@/components/book/bookDetail";
-import category from "@/components/book/category";
+import myCollect from "@/components/personalCenter/follow/MyBookshelf";
+import bookDetail from "@/components/book/BookDetail";
+import category from "@/components/book/bookComponent/Category";
 import ex from "@/components/book/ex";
-import article from "@/components/book/article";
+import article from "@/components/book/ArticleDetail";
 import Login from "@/components/Login";
 import GroupFind from "@/components/group/Group";
 import GroupPost from "@/components/group/GroupPost";
-import BookConnect from "@/components/book/bookContent/bookContent";
+import BookConnect from "@/components/book/bookContent";
 import GroupEditor from "@/components/group/GroupEditor"
 import MyGroups from "@/components/group/MyGroups";
 import Group from "@/components/group/Group";
 import GroupDetail from "@/components/group/GroupDetail";
 import ArticleEditor from "@/components/personalCenter/ArticleEditor";
+import GroupManage from "@/components/personalCenter/follow/GroupManage";
+import CreateGroup from "@/components/personalCenter/CreateGroup";
 
 Vue.use(VueRouter)
 
@@ -58,6 +60,8 @@ const routes = [
             {path: '/personCenter/info', component: Info},
             {path: '/personCenter/myArticle', component: myArticle},
             {path: '/personCenter/myCollect', component: myCollect},
+            {path: '/personCenter/groupManage', component: GroupManage},
+            {path: '/personCenter/createGroup', component: CreateGroup},
         ]
     },
     {path: '/articleEditor', component: ArticleEditor,},

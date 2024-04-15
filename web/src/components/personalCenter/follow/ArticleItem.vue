@@ -28,11 +28,11 @@
 import bookDetailApi from "../../../../api/bookDetail";
 import bookApi from "../../../../api/book";
 import userApi from "../../../../api/user"
-import MyComment from "@/components/personalCenter/follow/ArticleItem/MyComment";
-import MyReviewer from "@/components/personalCenter/follow/ArticleItem/MyReviewer";
-import ReviewedBooks from "@/components/personalCenter/follow/ArticleItem/ReviewedBooks";
+import MyComment from "@/components/personalCenter/follow/articleItem/MyComment";
+import MyReviewer from "@/components/personalCenter/follow/articleItem/MyReviewer";
+import ReviewedBooks from "@/components/personalCenter/follow/articleItem/ReviewedBooks";
 import articleApi from "../../../../api/article";
-import MyArticle from "@/components/personalCenter/follow/ArticleItem/MyArticle";
+import MyArticle from "@/components/personalCenter/follow/articleItem/MyArticle";
 
 export default {
   components: {MyComment, MyReviewer, ReviewedBooks, MyArticle},

@@ -34,7 +34,6 @@
         <!--        分割线-->
         <el-divider><i class="el-icon-notebook-2"></i></el-divider>
 
-
         <h2>精选书评</h2>
         <book-comment :reviewList="reviewList"></book-comment>
 
@@ -52,11 +51,11 @@ import bookApi from "@/../api/book";
 import bookTypeApi from "@/../api/booktype";
 import authorApi from "../../../api/author"
 import articleApi from "../../../api/article"
-import Rank from "@/components/book/BookMain/Rank";
-import ReaderArticle from "@/components/book/BookMain/ReaderArticle";
-import Classify from "@/components/book/BookMain/Classify";
-import BookComment from "@/components/book/BookMain/BookComment";
-import everyWeek from "@/components/book/BookMain/everyWeek";
+import Rank from "@/components/book/bookComponent/RecommentRank";
+import ReaderArticle from "@/components/book/bookComponent/ReaderArticle";
+import Classify from "@/components/book/Classify";
+import BookComment from "@/components/book/bookComponent/BookComment";
+import everyWeek from "@/components/book/bookComponent/EveryWeek";
 
 export default {
   name: "Read",
