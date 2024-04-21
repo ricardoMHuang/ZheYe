@@ -353,7 +353,7 @@ export default {
         })
       } else {
         this.$router.push({
-          path: '/group/groupEditor',
+          path: '/group/postEditor',
           query: {
             groupId: this.groupId
           }

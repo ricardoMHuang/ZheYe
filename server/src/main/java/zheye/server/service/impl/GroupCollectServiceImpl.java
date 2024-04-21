@@ -53,7 +53,7 @@ public class GroupCollectServiceImpl extends ServiceImpl<GroupCollectMapper, Gro
     }
 
     @Override
-    public List<GroupCollect> selectByGroupId(int groupId) {
+    public List<GroupCollect> selectByGroupId(Long groupId) {
         QueryWrapper<GroupCollect> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("group_id", groupId);
         return baseMapper.selectList(queryWrapper);

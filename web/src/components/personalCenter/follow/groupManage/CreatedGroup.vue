@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="6" v-for="(group,j) in groupList" :key="j" style="margin-bottom: 45px">
+      <el-empty v-if="ICrtGroupList.length===0" description="你还未创建过小组诶"></el-empty>
+      <el-col v-else :span="6" v-for="(group,j) in ICrtGroupList" :key="j" style="margin-bottom: 45px">
         <div :body-style="{ padding: '0px'} " style="display: flex">
           <el-card :body-style="{padding: 0}" style="width: 78px;height: 78px; position: relative">
             <img class="group-image" :src="group.image" @click="openGroup(group.id)">
@@ -13,29 +14,29 @@
               <button class="exit-button">
                 <span class="shadow"></span>
                 <span class="edge"></span>
-                <span class="front text" @click="clear(group.id)">退出</span>
+                <span class="front text" @click="disband(group.id)">解散</span>
               </button>
             </div>
           </div>
         </div>
-
       </el-col>
-    </el-row>
 
+    </el-row>
+    <el-button @click="createGroup">创建小组</el-button>
   </div>
 </template>
 
 <script>
-import groupCollectApi from "../../../../../api/groupCollect";
 import groupApi from "../../../../../api/group";
+import groupCollectApi from "../../../../../api/groupCollect";
 
 export default {
-  name: "myGroup",
-
+  name: "CreateGroup",
   data() {
     return {
-      groupList: [],
-
+      groupEmptyVisible: true,
+      ICrtGroupList: [],
+      rule: [],
     }
   },
   mounted() {
@@ -43,27 +44,30 @@ export default {
   },
   methods: {
     init() {
-      this.getGroups();
+      this.getCreatedGroups();
     },
-    async getGroups() {
-      let res = await groupApi.getUJGroupList(JSON.parse(window.sessionStorage.getItem("userInfo")).id)
-
+    async getCreatedGroups() {
+      let res = await groupApi.getUCGroupList(JSON.parse(window.sessionStorage.getItem("userInfo")).id);
       res = res.data;
+      if (res.code === 200) {
+        this.groupEmptyVisible = false
+      }
       console.log(res.message, res.data);
-      this.groupList = res.data;
+      this.ICrtGroupList = res.data;
     },
-    //确认退出小组的弹框
-    clear(id) {
-      this.$confirm('确认退出小组?', '提示', {
+    //确认解散小组的弹框
+    disband(groupId) {
+      this.$prompt('请输入解散理由', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
+        inputPattern: /^.+$/,
+        inputErrorMessage: "解散理由不能为空",
         type: 'warning'
-      }).then(() => {
-        this.quitGroup(id);
+      }).then(({value}) => {
+        this.disbandGroup(groupId, value);
         this.$message({
           type: 'success',
           message: '成功退出!',
-
         });
       }).catch(() => {
         this.$message({
@@ -72,27 +76,30 @@ export default {
         });
       });
     },
-    //退出小组
-    async quitGroup(groupId) {
-      let isSuccess = await groupCollectApi.deleteGroupCollect({
-        "groupId": groupId,
-        "userId": JSON.parse(window.sessionStorage.getItem("userInfo")).id,
-      });
-      await groupApi.reduceNumber(groupId);
-      isSuccess = isSuccess.data;
-      console.log(isSuccess.message);
-      await this.getGroups();
+    //解散小组
+    async disbandGroup(groupId, disbandReason) {
+      let res = await groupApi.disbandGroup({id: groupId, disbandReason: disbandReason});
+      res = res.data;
+      console.log(res.message, res.data);
+      await this.getCreatedGroups();
     },
-    openGroup(id) {
+    createGroup() {
       this.$router.push({
-        path: '/group/groupDetail',
-        query: {
-          groupId: id,
-        }
+        path: "/groupEditor",
       })
     },
+    openGroup(groupId) {
+      this.$router.push({
+        path: "/group/groupDetail",
+        query: {
+          groupId: groupId,
+        },
+      })
 
-  },
+    },
+  }
+
+
 }
 </script>
 

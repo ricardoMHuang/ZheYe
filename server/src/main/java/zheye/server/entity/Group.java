@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @TableName("all_group")
 public class Group {
-    private Integer id;
+    private Long id;
     private String image;
     private String brief;
     private String name;
@@ -16,5 +16,6 @@ public class Group {
     private int typeId;
     private int number;
     private String creatTime;
-    private int creatorId;
+    private Long creatorId;
+    private String disbandReason;
 }

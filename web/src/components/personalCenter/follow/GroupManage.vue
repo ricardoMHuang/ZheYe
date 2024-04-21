@@ -9,11 +9,11 @@
         </el-tab-pane>
         <el-tab-pane label="创建的小组" name="second">
           <h3>创建的小组</h3>
-          <create-group></create-group>
+          <created-group></created-group>
         </el-tab-pane>
         <el-tab-pane label="我的帖子" name="third">
           <h3>我的帖子</h3>
-          <my-post></my-post>
+          <my-posts></my-posts>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -23,11 +23,13 @@
 <script>
 import groupApi from "../../../../api/group";
 import groupCollectApi from "../../../../api/groupCollect";
-import MyGroup from "@/components/personalCenter/follow/groupManage/MyGroup";
+import MyGroup from "@/components/personalCenter/follow/groupManage/MyGroups";
+import CreatedGroup from "@/components/personalCenter/follow/groupManage/CreatedGroup";
+import MyPosts from "@/components/personalCenter/follow/groupManage/MyPosts";
 
 export default {
   name: "GroupManage",
-  components: {MyGroup},
+  components: {MyGroup, CreatedGroup, MyPosts},
   data() {
     return {
       activeName: "first",

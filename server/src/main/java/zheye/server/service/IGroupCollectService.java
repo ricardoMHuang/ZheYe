@@ -23,5 +23,5 @@ public interface IGroupCollectService extends IService<GroupCollect> {
 
     int deleteGroupCollect(GroupCollect groupCollect);
 
-    List<GroupCollect> selectByGroupId(int groupId);
+    List<GroupCollect> selectByGroupId(Long groupId);
 }

@@ -14,13 +14,14 @@ import Login from "@/components/Login";
 import GroupFind from "@/components/group/Group";
 import GroupPost from "@/components/group/GroupPost";
 import BookConnect from "@/components/book/bookContent";
-import GroupEditor from "@/components/group/GroupEditor"
-import MyGroups from "@/components/group/MyGroups";
+import PostEditor from "@/components/group/PostEditor"
+import MyGroups from "@/components/group/MyGroupAPost";
 import Group from "@/components/group/Group";
 import GroupDetail from "@/components/group/GroupDetail";
 import ArticleEditor from "@/components/personalCenter/ArticleEditor";
 import GroupManage from "@/components/personalCenter/follow/GroupManage";
-import CreateGroup from "@/components/personalCenter/CreateGroup";
+import CreateGroup from "@/components/personalCenter/follow/groupManage/CreatedGroup";
+import GroupEditor from "@/components/personalCenter/GroupEditor";
 
 Vue.use(VueRouter)
 
@@ -45,7 +46,7 @@ const routes = [
             {path: '/group/groupDetail', component: GroupDetail},
             {path: '/group/GroupFind', component: GroupFind},
             {path: '/group/GroupPost', component: GroupPost},
-            {path: '/group/groupEditor', component: GroupEditor},
+            {path: '/group/postEditor', component: PostEditor},
         ],
     },
     {
@@ -65,6 +66,7 @@ const routes = [
         ]
     },
     {path: '/articleEditor', component: ArticleEditor,},
+    {path: '/groupEditor', component: GroupEditor,},
 
 
     /*{

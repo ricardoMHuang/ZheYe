@@ -44,7 +44,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         String suffix = file.getOriginalFilename();
         String prefix = suffix.substring(suffix.lastIndexOf(".") + 1);
         //为防止文件重名被覆盖，文件名取名为：当前日期 + 1-1000内随机数
-        String fileName = UUID.randomUUID() + "." + prefix;
+        String fileName = "post" + UUID.randomUUID() + "." + prefix;
         //创建文件路径
         System.out.println("fileName: " + fileName);
         File dest = new File(filePath + fileName);

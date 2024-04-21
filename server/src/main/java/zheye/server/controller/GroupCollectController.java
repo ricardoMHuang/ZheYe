@@ -1,12 +1,16 @@
 package zheye.server.controller;
 
 import org.springframework.web.bind.annotation.*;
+import zheye.server.entity.Group;
 import zheye.server.entity.GroupCollect;
+import zheye.server.service.GroupService;
 import zheye.server.service.IGroupCollectService;
 import zheye.server.utils.Result;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -21,7 +25,8 @@ import java.util.List;
 public class GroupCollectController {
     @Resource
     IGroupCollectService iGroupCollectService;
-
+    @Resource
+    GroupService groupService;
     @PostMapping("/selectGroup")
     public Result selectGroup(@RequestBody GroupCollect groupCollect) {
         GroupCollect groupCollect1 = iGroupCollectService.selectGroup(groupCollect);
@@ -45,8 +50,17 @@ public class GroupCollectController {
     @PostMapping("/selectGroupByUserId")
     public Result selectGroupByUserId(@RequestBody long userId) {
         List<GroupCollect> groupCollectList = iGroupCollectService.selectGroupByUserId(userId);
-        if (groupCollectList != null) {
-            return Result.ok(groupCollectList).message("收藏的小组查询成功");
+        List<Long> idList = groupCollectList.stream().map(GroupCollect::getGroupId).collect(Collectors.toList());
+        idList = groupService.selectList(idList).stream().map(Group::getId).collect(Collectors.toList());
+        GroupCollect groupCollect = new GroupCollect();
+        groupCollect.setUserId(userId);
+        List<GroupCollect> newGroupCollectList = new ArrayList<>();
+        for (Long groupId : idList) {
+            groupCollect.setGroupId(groupId);
+            newGroupCollectList.add(iGroupCollectService.selectGroup(groupCollect));
+        }
+        if (newGroupCollectList != null) {
+            return Result.ok(newGroupCollectList).message("收藏的小组查询成功");
         } else {
             return Result.error().message("收藏的小组为空");
         }
@@ -64,7 +78,7 @@ public class GroupCollectController {
     }
 
     @PostMapping("/selectByGroupId")
-    public Result selectByGroupId(@RequestBody int groupId) {
+    public Result selectByGroupId(@RequestBody Long groupId) {
         List<GroupCollect> groupCollectList = iGroupCollectService.selectByGroupId(groupId);
         if (groupCollectList != null) {
             return Result.ok(groupCollectList).message("小组成员id查询成功");

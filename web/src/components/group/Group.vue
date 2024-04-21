@@ -212,8 +212,7 @@ export default {
       let myGroup = await groupCollectApi.selectGroupByUserId(this.userId);
       myGroup = myGroup.data;
       this.myGroupSum = myGroup.data.length;
-      console.log(myGroup.message);
-      console.log(this.myGroupSum);
+      console.log(myGroup.message, this.myGroupSum);
     },
     //  打开我的小组
     openMyGroups() {

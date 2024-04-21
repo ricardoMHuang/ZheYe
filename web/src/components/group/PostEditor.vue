@@ -54,7 +54,7 @@ import 'quill/dist/quill.bubble.css'
 import postApi from "../../../api/post"
 
 export default {
-  name: "Editor",
+  name: "postEditor",
   components: {
     quillEditor
   },
@@ -274,6 +274,7 @@ export default {
       console.log(file);
       let res = postApi.deleteImage(file.response.data);
       this.fileImgList = fileList;
+      this.upload_btn = false;
       this.ruleForm.checkCoverUrl = null;
     },
     //文件超出上传个数时
